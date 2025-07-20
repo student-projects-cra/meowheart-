@@ -1,0 +1,2336 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <base target="_top">
+    <link href="https://fonts.googleapis.com/css2?family=Itim&display=swap" rel="stylesheet">
+    <link rel="preload" as="image" href="https://i.postimg.cc/WbGrTm0k/bg.png">
+    <link rel="stylesheet" href="style.css">
+
+  </head>
+  <body>
+<div id="loading-screen" class="load-page">
+  <img src="https://i.postimg.cc/J0vGQ0wZ/Meowdicine-farm.png" class="game-logo" alt="preload">
+
+  <div id="loading-content">
+    <div id="loading-text" class="load-text">กำลังโหลด...</div>
+    <div id="progress-container" class="bar">
+      <div id="progress-bar" class="load-bar"></div>
+    </div>
+  </div>
+
+  <button id="startGameBtn" class="startgame" style="display:none">
+  <span>เริ่มเกม</span>
+  </button>
+</div>
+
+<audio id="bg-music" autoplay muted loop>
+  <source src="https://files.catbox.moe/y0cxbd.mp3" type="audio/mpeg">
+</audio>
+
+    <div id="game-container">
+      <div class="hud">
+        <div class="hud-left">
+          <div class="hud-item">
+            <img src="https://i.postimg.cc/fLHX3Gj3/level.png" alt="Level">
+            <span id="level">Lv. 1</span>
+          </div>
+          <div class="hud-item">
+            <img src="https://i.postimg.cc/05fXnjZm/coin.png" alt="Coin">
+            <span id="coin">100 ฿</span>
+          </div>
+        </div>
+        <div class="icon-button" onclick="openInventory()">
+          <img src="https://i.postimg.cc/nLgXr6Wh/basket2.png" alt="Inventory">
+          <div class="icon-label">คลัง</div>
+        </div>
+        <div class="shop-button" onclick="openShop()">
+          <img src="https://i.postimg.cc/X7DQtnxX/shop2.png" alt="Shop">
+          <div class="shop-label">ค้าขาย</div>
+        </div>
+        <div class="quest-button" onclick="openQuest()">
+          <img src="https://i.postimg.cc/XJSdRrFs/quest.png" alt="Quest">
+          <div class="quest-label">ภารกิจ</div>
+        </div>
+        <div class="free-button" onclick="openFreeCoin()">
+          <img src="https://i.postimg.cc/k4gmD6b5/question.png" alt="Free">
+          <div class="free-label">โบนัส</div>
+        </div>
+        <div class="settings-icon" onclick="openSettingsPopup()">
+         <img src="https://i.postimg.cc/sDBm9pKg/setting.png">
+         <div class="settings-icon-label">ตั้งค่า</div>
+        </div>
+        <div class="kitchen-icon" onclick="openHerbalKitchen()">
+         <img src="https://i.postimg.cc/0NbBptkz/kitchen.png">
+         <div class="kitchen-icon-label">ครัว</div>
+        </div>
+        <div class="neighbor-icon" onclick="openNeighborPopup()">
+         <img src="https://i.postimg.cc/gjdsB4Wq/friend.png">
+         <div class="neighbor-icon-label">เพื่อน<br>บ้าน</div>
+        </div>
+      </div>
+
+
+      <div id="scroll-area">
+        <div class="farm-background" id="farm0"></div>
+        <div class="farm-background" id="farm1"></div>
+        <div class="farm-background" id="farm2"></div>
+      </div>
+    </div>
+
+<div id="plant-title" class="popup-title" style="display: none;">
+  เลือกชนิดผักที่จะปลูก
+</div>
+
+<div id="inventory-title" class="popup-title" style="display: none;">
+  คลังเก็บเกี่ยว
+</div>
+
+<div id="quest-title" class="popup-title" style="display: none;">
+  ภารกิจ
+</div>
+
+<div id="herbal-kitchen-title" class="popup-title" style="display: none;">
+  ครัวทำอาหาร
+</div>
+<div id="popup-overlay" style="display:none;"></div>
+    <div class="popup" id="popup">
+      <div id="popup-content"></div>
+      <div class="close-button" onclick="closePopup()">
+      <img src="https://i.postimg.cc/T2spPgp7/close.png">
+      </div>
+    </div>
+
+<div id="name-popup" style="position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.7); display:none; align-items:center; justify-content:center; z-index:9999;">
+  <div class="name-pop">
+    <h3>ยินดีต้อนรับ !</h3>
+    <p>กรุณาตั้งชื่อบัญชีผู้เล่นของคุณ</p>
+    <input type="text" id="nameInput" placeholder="ตั้งชื่อของคุณ/ชื่อผู้เล่นเดิม" class="custom-input">
+    <button id="btnSaveName" class="start-btn">
+    <span>บันทึก</span>
+    </button>
+  </div>
+</div>  
+
+    <script>
+const thaiNames = {
+  rice: "ข้าวสาลี",
+  corn: "ข้าวโพด",
+  lettuce: "ผักกาด",
+  pumpkin: "ฟักทอง",
+  garlic: "กระเทียม",
+  tomato: "มะเขือเทศ",
+  chili: "พริก",
+  carrot: "แครอท",
+  mushroom: "เห็ด",
+  potato: "มันฝรั่ง",
+  cabbage: "กะหล่ำปลี",
+  broccoli: "บรอกโคลี",
+  radish: "หัวไชเท้า",
+  cucumber: "แตงกวา",
+  eggplant: "มะเขือม่วง",
+  ginger: "ขิง",
+  beetroot: "บีทรูท"
+};
+
+const ingredientImages = {
+  "ข้าวสาลี": 'https://i.postimg.cc/QdncYGTc/IMG-1355.png',
+  "ข้าวโพด": 'https://i.postimg.cc/XYyvWTPf/IMG-1368.png',
+  "ผักกาด": 'https://i.postimg.cc/ryrcKSjT/IMG-1363.png',
+  "ฟักทอง": 'https://i.postimg.cc/28Sw0xtR/IMG-1359.png',
+  "กระเทียม": 'https://i.postimg.cc/prF2vjG2/IMG-1361.png',
+  "มะเขือเทศ": 'https://i.postimg.cc/bwj1KHCw/IMG-1349.png',
+  "พริก": 'https://i.postimg.cc/ryrgd9Hq/IMG-1350.png',
+  "แครอท": 'https://i.postimg.cc/5trqyHqH/IMG-1357.png',
+  "เห็ด": 'https://i.postimg.cc/Px8bwt2S/IMG-1365.png',
+  "มันฝรั่ง": 'https://i.postimg.cc/SxTc1XPZ/IMG-1366.png',
+  "กะหล่ำปลี": 'https://i.postimg.cc/VvWCq5MW/IMG-1353.png',
+  "บรอกโคลี": 'https://i.postimg.cc/Yq8FjGtp/IMG-1362.png',
+  "หัวไชเท้า": 'https://i.postimg.cc/gJ5BCKjw/IMG-1465.png',
+  "แตงกวา": 'https://i.postimg.cc/XNRzxxtm/IMG-1461.png',
+  "มะเขือม่วง": 'https://i.postimg.cc/HLn9T05D/IMG-1367.png',
+  "ขิง": 'https://i.postimg.cc/N0jJLnr9/IMG-1459.png',
+  "บีทรูท": 'https://i.postimg.cc/RF3gLndv/IMG-1463.png'
+}
+
+const imageUrls = {
+  rice: 'https://i.postimg.cc/QdncYGTc/IMG-1355.png',
+  corn: 'https://i.postimg.cc/XYyvWTPf/IMG-1368.png',
+  lettuce: 'https://i.postimg.cc/ryrcKSjT/IMG-1363.png',
+  pumpkin: 'https://i.postimg.cc/28Sw0xtR/IMG-1359.png',
+  garlic: 'https://i.postimg.cc/prF2vjG2/IMG-1361.png',
+  tomato: 'https://i.postimg.cc/bwj1KHCw/IMG-1349.png',
+  chili: 'https://i.postimg.cc/ryrgd9Hq/IMG-1350.png',
+  carrot: 'https://i.postimg.cc/5trqyHqH/IMG-1357.png',
+  mushroom: 'https://i.postimg.cc/Px8bwt2S/IMG-1365.png',
+  potato: 'https://i.postimg.cc/SxTc1XPZ/IMG-1366.png',
+  cabbage: 'https://i.postimg.cc/VvWCq5MW/IMG-1353.png',
+  broccoli: 'https://i.postimg.cc/Yq8FjGtp/IMG-1362.png',
+  radish: 'https://i.postimg.cc/gJ5BCKjw/IMG-1465.png',
+  cucumber: 'https://i.postimg.cc/XNRzxxtm/IMG-1461.png',
+  eggplant: 'https://i.postimg.cc/HLn9T05D/IMG-1367.png',
+  ginger: 'https://i.postimg.cc/N0jJLnr9/IMG-1459.png',
+  beetroot: 'https://i.postimg.cc/RF3gLndv/IMG-1463.png',
+  seedling: 'https://i.postimg.cc/fRL9dzbY/IMG-1374.png'
+};
+
+const imageUrlsSeed = {
+  rice: 'https://i.postimg.cc/MTkMg1mY/IMG-1386.png',
+  corn: 'https://i.postimg.cc/7YBCwFNh/IMG-1383.png',
+  lettuce: 'https://i.postimg.cc/g2Qn63QP/IMG-1388.png',
+  pumpkin: 'https://i.postimg.cc/9Mj0LCc8/IMG-1391.png',
+  garlic: 'https://i.postimg.cc/9Xb0Y6Kb/IMG-1389.png',
+  tomato: 'https://i.postimg.cc/cLgJZrHk/IMG-1381.png',
+  chili: 'https://i.postimg.cc/htktGcQD/IMG-1382.png',
+  carrot: 'https://i.postimg.cc/85Dkh4bx/IMG-1380.png',
+  mushroom: 'https://i.postimg.cc/wxwxmhRb/IMG-1384.png',
+  potato: 'https://i.postimg.cc/6QVt5RNc/IMG-1390.png',
+  cabbage: 'https://i.postimg.cc/rmQT5kst/IMG-1387.png',
+  broccoli: 'https://i.postimg.cc/wx4HvgnC/IMG-1393.png',
+  radish: 'https://i.postimg.cc/3JQt2NvH/IMG-1466.png',
+  cucumber: 'https://i.postimg.cc/FFLPf31Z/IMG-1462.png',
+  eggplant: 'https://i.postimg.cc/Gpvh8Vvk/IMG-1392.png',
+  ginger: 'https://i.postimg.cc/28d2GYQL/IMG-1460.png',
+  beetroot: 'https://i.postimg.cc/Dw25YN6j/IMG-1464.png'
+};
+
+
+const seedUnlockLevels = {
+  rice: 1,
+  corn: 1,
+  lettuce: 2,
+  pumpkin: 2,
+  garlic: 2,
+  tomato: 2,
+  chili: 2,
+  carrot: 2,
+  mushroom: 3,
+  potato: 3,
+  cabbage: 4,
+  broccoli: 4,
+  radish: 4,
+  cucumber: 4,
+  eggplant: 5,
+  ginger: 5,
+  beetroot: 5
+};
+
+const seedPrices = {
+  rice: 5,
+  corn: 6,
+  lettuce: 7,
+  pumpkin: 8,
+  garlic: 10,
+  tomato: 12,
+  chili: 13,
+  carrot: 14,
+  mushroom: 16,
+  potato: 18,
+  cabbage: 20,
+  broccoli: 22,
+  radish: 20,
+  cucumber: 20,
+  eggplant: 24,
+  ginger: 28,
+  beetroot: 30
+};
+
+const growTimes = {
+  rice: 30000,
+  corn: 30000,
+  lettuce: 60000,
+  pumpkin: 60000,
+  garlic: 60000,
+  tomato: 90000,
+  chili: 90000,
+  carrot: 120000,
+  mushroom: 120000,
+  potato: 180000,
+  cabbage: 180000,
+  broccoli: 240000,
+  radish: 240000,
+  cucumber: 240000,
+  eggplant: 240000,
+  ginger: 300000,
+  beetroot: 300000
+};
+
+let plotIntervalStarted = false;
+
+const maxFreeCoinPerDay = 1;
+
+function checkFreeCoinReset() {
+  const today = new Date().toDateString();
+  if (player.lastFreeCoinDate !== today) {
+    player.freeCoinCount = 0;
+    player.lastFreeCoinDate = today;
+  }
+}
+
+let player;
+
+function mergeQuests(player) {
+  const defaultQuests = [        
+    { id: 1, title: "ปลูกข้าวสาลี 4 ช่อง", done: false, rewardExp: 20, rewardCoin: 0 },
+    { id: 2, title: "ขายผักครั้งแรก", done: false, rewardExp: 10, rewardCoin: 10 },
+    { id: 3, title: "ปลูกผักครบ 3 ชนิด", done: false, rewardExp: 15, rewardCoin: 5 },
+    { id: 4, title: "เก็บเกี่ยวผักสำเร็จ 5 ผล", done: false, rewardExp: 15, rewardCoin: 5 },
+    { id: 5, title: "รับเหรียญฟรี 1 ครั้ง", done: false, rewardExp: 5, rewardCoin: 5 },
+    { id: 6, title: "ปลดล็อกช่องปลูกในแปลงแรกครบ 4 ช่อง", done: false, rewardExp: 25, rewardCoin: 10 },
+    { id: 7, title: "ปลดล็อกแปลงที่ 2", done: false, rewardExp: 25, rewardCoin: 10 },
+    { id: 8, title: "ปลูกผักครบ 5 ชนิด", done: false, rewardExp: 20, rewardCoin: 10 },
+    { id: 9, title: "ขายผักครบ 10 ผล", done: false, rewardExp: 20, rewardCoin: 10 },
+    { id: 10, title: "รับเหรียญฟรีครบ 3 ครั้ง", done: false, rewardExp: 15, rewardCoin: 15 },
+    { id: 11, title: "มีเหรียญครบ 200 บาท", done: false, rewardExp: 20, rewardCoin: 0 },
+    { id: 12, title: "มีผักในคลังรวม 20 ผล", done: false, rewardExp: 25, rewardCoin: 10 },
+    { id: 13, title: "ปลูกผักครบ 8 ชนิด", done: false, rewardExp: 30, rewardCoin: 10 },
+    { id: 14, title: "ปลดล็อกแปลงปลูกครบ 3 แปลง", done: false, rewardExp: 35, rewardCoin: 20 },
+    { id: 15, title: "สะสม EXP ถึงเลเวล 3", done: false, rewardExp: 0, rewardCoin: 20 },
+    { id: 16, title: "ขายผักครบ 20 ผล", done: false, rewardExp: 30, rewardCoin: 15 },
+    { id: 17, title: "รับเหรียญฟรีครบ 6 ครั้ง", done: false, rewardExp: 20, rewardCoin: 15 },
+    { id: 18, title: "มีผักในคลังรวม 50 ผล", done: false, rewardExp: 40, rewardCoin: 20 },
+    { id: 19, title: "ส่งอาหารให้แมวครั้งแรก", done: false, rewardExp: 15, rewardCoin: 10 },
+    { id: 20, title: "ส่งอาหารให้แมวครบ 5 ตัว", done: false, rewardExp: 30, rewardCoin: 15 },
+    { id: 21, title: "ปรุงอาหารครั้งแรก", done: false, rewardExp: 10, rewardCoin: 5 },
+    { id: 22, title: "ปรุงอาหารครบ 10 ถ้วย", done: false, rewardExp: 25, rewardCoin: 15 },
+  ];
+
+  // ถ้า player ไม่มี quests เลยให้ตั้งค่า default ทั้งหมด
+  if (!Array.isArray(player.quests) || player.quests.length === 0) {
+    player.quests = defaultQuests;
+    return;
+  }
+
+  // รวม quests ใหม่กับ quests เก่า
+  const questMap = new Map();
+
+  // ใส่ quests เดิมลง map
+  player.quests.forEach(q => {
+    questMap.set(q.id, q);
+  });
+
+  // ถ้า quests ใหม่มี id ที่ player ยังไม่มี ให้เพิ่มเข้าไป
+  defaultQuests.forEach(dq => {
+    if (!questMap.has(dq.id)) {
+      questMap.set(dq.id, dq);
+    }
+  });
+
+  // แปลง map กลับเป็น array
+  player.quests = Array.from(questMap.values());
+
+    const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+}
+
+
+function init(data) {
+  if (data) {
+    player = typeof data === "string" ? JSON.parse(data) : data;
+
+    // Parse fields ที่อาจถูก save เป็น string จาก GAS
+    if (typeof player.inventory === "string") player.inventory = JSON.parse(player.inventory);
+    if (typeof player.plots === "string") player.plots = JSON.parse(player.plots);
+    if (typeof player.quests === "string") player.quests = JSON.parse(player.quests);
+    if (typeof player.herbalInventory === "string") player.herbalInventory = JSON.parse(player.herbalInventory);
+    if (typeof player.answeredQuestions === "string") player.answeredQuestions = JSON.parse(player.answeredQuestions);
+    if (typeof player.answeredFreeCoins === "string") player.answeredFreeCoins = JSON.parse(player.answeredFreeCoins);
+
+    // Inventory default
+    const defaultInventory = {
+      rice: 0, riceSeed: 0, corn: 0, cornSeed: 0,
+      lettuce: 0, lettuceSeed: 0, pumpkin: 0, pumpkinSeed: 0,
+      garlic: 0, garlicSeed: 0, tomato: 0, tomatoSeed: 0,
+      chili: 0, chiliSeed: 0, eggplant: 0, eggplantSeed: 0,
+      carrot: 0, carrotSeed: 0, mushroom: 0, mushroomSeed: 0,
+      potato: 0, potatoSeed: 0, cabbage: 0, cabbageSeed: 0,
+      broccoli: 0, broccoliSeed: 0,
+    };
+
+    if (!player.inventory) player.inventory = {};
+    for (let key in defaultInventory) {
+      if (typeof player.inventory[key] === "undefined") {
+        player.inventory[key] = defaultInventory[key];
+      }
+    }
+
+    // Herbal inventory default
+    if (!player.herbalInventory) player.herbalInventory = {};
+    herbalMenus.forEach(menu => {
+      if (typeof player.herbalInventory[menu.id] === 'undefined') {
+        player.herbalInventory[menu.id] = 0;
+      }
+    });
+
+    mergeQuests(player);
+
+  } else {
+    // เริ่มเกมใหม่
+    player = {
+      coin: 100,
+      level: 1,
+      exp: 0,
+      inventory: {
+        rice: 0, riceSeed: 0, corn: 0, cornSeed: 0,
+        lettuce: 0, lettuceSeed: 0, pumpkin: 0, pumpkinSeed: 0,
+        garlic: 0, garlicSeed: 0, tomato: 0, tomatoSeed: 0,
+        chili: 0, chiliSeed: 0, eggplant: 0, eggplantSeed: 0,
+        carrot: 0, carrotSeed: 0, mushroom: 0, mushroomSeed: 0,
+        potato: 0, potatoSeed: 0, cabbage: 0, cabbageSeed: 0,
+        broccoli: 0, broccoliSeed: 0,
+      },
+      freeCoinCount: 0,
+      totalFreeCoin: 0,
+      lastFreeCoinDate: null,
+      dailySalesCount: 0,
+      lastSellDate: null,
+      plots: Array.from({ length: 24 }, () => ({
+        unlockedSlots: 1,
+        planted: [false, false, false, false]
+      })),
+      quests: [
+        { id: 1, title: "ปลูกข้าวสาลี 4 ช่อง", done: false, rewardExp: 20, rewardCoin: 0 },
+        { id: 2, title: "ขายผักครั้งแรก", done: false, rewardExp: 10, rewardCoin: 10 },
+        { id: 3, title: "ปลูกผักครบ 3 ชนิด", done: false, rewardExp: 15, rewardCoin: 5 },
+        { id: 4, title: "เก็บเกี่ยวผักสำเร็จ 5 ผล", done: false, rewardExp: 15, rewardCoin: 5 },
+        { id: 5, title: "รับเหรียญฟรี 1 ครั้ง", done: false, rewardExp: 5, rewardCoin: 5 },
+        { id: 6, title: "ปลดล็อกช่องปลูกในแปลงแรกครบ 4 ช่อง", done: false, rewardExp: 25, rewardCoin: 10 },
+        { id: 7, title: "ปลดล็อกแปลงที่ 2", done: false, rewardExp: 25, rewardCoin: 10 },
+        { id: 8, title: "ปลูกผักครบ 5 ชนิด", done: false, rewardExp: 20, rewardCoin: 10 },
+        { id: 9, title: "ขายผักครบ 10 ผล", done: false, rewardExp: 20, rewardCoin: 10 },
+        { id: 10, title: "รับเหรียญฟรีครบ 3 ครั้ง", done: false, rewardExp: 15, rewardCoin: 15 },
+        { id: 11, title: "มีเหรียญครบ 200 บาท", done: false, rewardExp: 20, rewardCoin: 0 },
+        { id: 12, title: "มีผักในคลังรวม 20 ผล", done: false, rewardExp: 25, rewardCoin: 10 },
+        { id: 13, title: "ปลูกผักครบ 8 ชนิด", done: false, rewardExp: 30, rewardCoin: 10 },
+        { id: 14, title: "ปลดล็อกแปลงปลูกครบ 3 แปลง", done: false, rewardExp: 35, rewardCoin: 20 },
+        { id: 15, title: "สะสม EXP ถึงเลเวล 3", done: false, rewardExp: 0, rewardCoin: 20 },
+        { id: 16, title: "ขายผักครบ 20 ผล", done: false, rewardExp: 30, rewardCoin: 15 },
+        { id: 17, title: "รับเหรียญฟรีครบ 6 ครั้ง", done: false, rewardExp: 20, rewardCoin: 15 },
+        { id: 18, title: "มีผักในคลังรวม 50 ผล", done: false, rewardExp: 40, rewardCoin: 20 },
+        { id: 19, title: "ส่งอาหารให้แมวครั้งแรก", done: false, rewardExp: 15, rewardCoin: 10 },
+        { id: 20, title: "ส่งอาหารให้แมวครบ 5 ตัว", done: false, rewardExp: 30, rewardCoin: 15 },
+        { id: 21, title: "ปรุงอาหารครั้งแรก", done: false, rewardExp: 10, rewardCoin: 5 },
+        { id: 22, title: "ปรุงอาหารครบ 10 ถ้วย", done: false, rewardExp: 25, rewardCoin: 15 },
+      ],
+      answeredQuestions: [],
+      answeredFreeCoins: []
+    };
+  }
+const neighborIcon = document.getElementById("neighbor-icon");
+  if (neighborIcon) {
+    neighborIcon.addEventListener("click", () => {
+      if (!currentVisitingCat) {
+        showMessage("ยังไม่มีแมวมาเยี่ยมตอนนี้");
+        return;
+      }
+      openNeighborPopup();
+    });
+  }
+  checkQuests();
+  renderPlots();
+  scheduleNextCatVisit();
+  updateHUD();
+}
+
+      function updateHUD() {
+        document.getElementById("coin").innerText = player.coin + " ฿";
+        // แสดงแค่เลเวล ไม่โชว์ EXP
+        document.getElementById("level").innerText = `Lv. ${player.level}`;
+      }
+
+      // ฟังก์ชันนี้ใช้แสดง alert แสดง EXP เมื่อคลิกที่เลเวล
+      function showExpAlert() {
+        const expNext = getExpForNextLevel(player.level);
+        showMessage(`EXP: ${player.exp} / ${expNext}`);
+      }
+
+function gainExp(amount) {
+  player.exp += amount;
+
+  let levelUps = 0;
+  while (player.exp >= getExpForNextLevel(player.level)) {
+    player.exp -= getExpForNextLevel(player.level);
+    player.level += 1;
+    levelUps++;
+  }
+
+  if (levelUps > 0) {
+    setTimeout(() => {
+      showMessage(`เลเวลอัป! ขึ้น ${levelUps} เลเวล ตอนนี้ Lv.${player.level}`);
+    }, 100); // เว้นเวลาเล็กน้อยเพื่อให้ DOM update เสร็จก่อนแสดง popup
+  }
+
+  checkQuests();
+  updateHUD();
+
+  const playerName = localStorage.getItem("playerName");
+  if (playerName) {
+    google.script.run.savePlayer(playerName, player);
+  }
+}
+
+function getExpForNextLevel(level) {
+  return level * 100;  // ตัวอย่าง: Lv.1 ต้องใช้ 100 EXP, Lv.2 ต้องใช้ 200 EXP, เพิ่มขึ้นตามเลเวล
+}
+
+const maxDailySales = 10;
+
+function checkDailySalesReset() {
+  if (!player) return;
+
+  const today = new Date().toDateString();
+
+  if (!player.lastSellDate || player.lastSellDate !== today) {
+    player.dailySalesCount = 0;
+    player.lastSellDate = today;
+  }
+}
+
+const herbalMenus = [
+  {
+    id: "wheatSoup",
+    name: "ซุปข้าวสาลี",
+    image: "https://example.com/cat1.png",
+    ingredients: ["rice", "rice", "rice", "rice"]
+  },
+  {
+    id: "friedCorn",
+    name: "ข้าวโพดทอดกรอบ",
+    image: "https://example.com/cat1.png",
+    ingredients: ["corn", "corn"]
+  },
+  {
+    id: "bakedRice",
+    name: "โจ๊กข้าวโพด",
+    image: "https://example.com/cat1.png",
+    ingredients: ["rice", "rice", "corn"]
+  },
+  {
+    id: "bakedGarlic",
+    name: "ข้าวอบกระเทียม",
+    image: "https://example.com/cat1.png",
+    ingredients: ["rice", "rice", "rice", "rice", "garlic", "garlic"]
+  },
+  {
+    id: "herbSoup",
+    name: "ซุปผักกาด",
+    image: "https://example.com/cat1.png",
+    ingredients: ["lettuce", "lettuce", "lettuce", "garlic"]
+  },
+  {
+    id: "godelSteam",
+    name: "แกงหวานฟักทอง",
+    image: "https://example.com/cat1.png",
+    ingredients: ["pumpkin", "pumpkin", "carrot"]
+  },
+  {
+    id: "potatoPui",
+    name: "มันฝรั่งบด",
+    image: "https://example.com/cat1.png",
+    ingredients: ["potato", "potato", "garlic"]
+  },
+  {
+    id: "cabbageSoup",
+    name: "ซุปกะหล่ำปลี",
+    image: "https://example.com/cat1.png",
+    ingredients: ["cabbage", "cabbage", "garlic", "garlic"]
+  },
+  {
+    id: "potatoCorn",
+    name: "มันฝรั่งอบข้าวโพด",
+    image: "https://example.com/cat1.png",
+    ingredients: ["potato", "potato", "corn", "corn"]
+  },
+  {
+    id: "broccoliStir",
+    name: "บรอกโคลีผัดน้ำมัน",
+    image: "https://example.com/cat10.png",
+    ingredients: ["broccoli", "broccoli", "broccoli", "garlic", "garlic"]
+  },
+  {
+    id: "broccoliSoup",
+    name: "ซุปครีมบรอกโคลี",
+    image: "https://example.com/cat10.png",
+    ingredients: ["broccoli", "broccoli", "corn", "corn"]
+  },
+  {
+    id: "radishSoup",
+    name: "ซุปหัวไชเท้า",
+    image: "https://example.com/cat8.png",
+    ingredients: ["radish", "radish", "radish", "radish", "garlic", "garlic"]
+  },
+  {
+    id: "sweetPumpkin",
+    name: "ฟักทองบด",
+    image: "https://example.com/cat1.png",
+    ingredients: ["pumpkin", "pumpkin", "carrot", "potato"]
+  },
+  {
+    id: "tomaJib",
+    name: "สลัดมะเขือเทศ",
+    image: "https://example.com/cat1.png",
+    ingredients: ["tomato", "tomato", "corn", "carrot"]
+  },
+  {
+    id: "mushrromMedley",
+    name: "ซุปเห็ดรวมมิตร",
+    image: "https://example.com/cat1.png",
+    ingredients: ["mushroom", "mushroom", "mushroom", "lettuce", "lettuce", "garlic"]
+  },
+  {
+    id: "eggplantSoft",
+    name: "มะเขือม่วงผัดพริก",
+    image: "https://example.com/cat1.png",
+    ingredients: ["eggplant", "eggplant","garlic", "garlic", "chili", "chili"]
+  },
+  {
+    id: "threeSteak",
+    name: "สเต็กผักสามสหาย",
+    image: "https://example.com/cat1.png",
+    ingredients: ["broccoli", "broccoli", "mushroom", "mushroom", "eggplant", "eggplant"]
+  },
+  {
+    id: "cornSalad",
+    name: "สลัดข้าวโพดสด",
+    image: "https://example.com/cat9.png",
+    ingredients: ["corn", "corn", "corn", "corn", "cucumber", "cucumber", "carrot", "carrot"]
+  },
+  {
+    id: "beetSalad",
+    name: "สลัดบีทรูทสด",
+    image: "https://example.com/cat5.png",
+    ingredients: ["beetroot", "beetroot", "cabbage", "carrot", "carrot"]
+  },
+  {
+    id: "sweetBeetstew",
+    name: "บีทรูทตุ๋นซอส",
+    image: "https://example.com/cat1.png",
+    ingredients: ["beetroot", "beetroot", "beetroot", "garlic", "carrot"]
+  },
+  {
+    id: "chiliGinger",
+    name: "พริกผัดขิง",
+    image: "https://example.com/cat1.png",
+    ingredients: ["chili", "chili", "ginger", "ginger", "tomato"]
+  },
+  {
+    id: "mushroomGinger",
+    name: "ผัดเห็ดน้ำมันหอย",
+    image: "https://example.com/cat1.png",
+    ingredients: ["mushroom", "mushroom", "garlic", "garlic", "ginger"]
+  },
+  {
+    id: "freshSalad",
+    name: "สลัดผักกรอบ",
+    image: "https://example.com/cat1.png",
+    ingredients: ["lettuce", "lettuce", "carrot", "carrot", "cabbage", "cabbage"]
+  },
+  {
+    id: "riceSoup",
+    name: "โจ๊กผักรวม",
+    image: "https://example.com/cat1.png",
+    ingredients: ["rice", "rice", "rice", "rice", "carrot", "carrot", "pumpkin", "pumpkin"]
+  },
+  {
+    id: "riceVeggie",
+    name: "ข้าวตุ๋นผักรวม",
+    image: "https://example.com/cat1.png",
+    ingredients: ["rice", "rice", "rice", "rice", "pumpkin", "pumpkin", "cabbage"]
+  },
+  {
+    id: "hotSpicy",
+    name: "น้ำซุปต้มยำ",
+    image: "https://example.com/cat1.png",
+    ingredients: ["chili", "chili", "chili", "mushroom", "mushroom", "tomato", "tomato"]
+  },
+  {
+    id: "veggieHotpot",
+    name: "หม้อไฟรวมผักสุขสันต์",
+    image: "https://example.com/cat1.png",
+    ingredients: ["mushroom", "mushroom", "mushroom", "pumpkin", "pumpkin", "pumpkin", "cabbage", "cabbage", "radish" , "radish"]
+  },
+  {
+    id: "veggieFive",
+    name: "สลัดรวมผัก 5 สี",
+    image: "https://example.com/cat1.png",
+    ingredients: ["beetroot", "corn", "carrot", "cucumber", "chili"]
+  }
+];
+
+const cats = [
+  {
+    id: "cat001",
+    name: "ถุงทอง",
+    story: [
+      { text: "เดินทางจากตลาดไกล เหนื่อยจัง! ถ้ามีโจ๊กหอม ๆ ร้อน ๆ สักถ้วยจะช่วยให้หายเหนื่อยเลย~", menu: "bakedRice" },
+      { text: "เมื่อคืนฝันว่ากำลังกินกะหล่ำปลีกรอบ ๆ กับน้ำซุปใส หอมมากเลย ตื่นมาก็ยังคิดถึงอยู่เลย~", menu: "cabbageSoup" },
+      { text: "ได้ยินว่ามีเมนูที่ใส่มะเขือม่วงนุ่ม ๆ น่ากินมาก...จริงมั้ย?", menu: "eggplantSoft" },
+      { text: "เจ้าแมวข้างบ้านท้าเราประลองกระโดดข้ามรั้ว เราชนะ! แต่เจ็บขานิดหน่อย ขอเมนูผักเขียวกรอบ ๆ เพิ่มพลังหน่อยสิ~", menu: "broccoliStir" },
+      { text: "วางแผนไว้แล้วว่าจะปีนเขาสูงสุดในแถบนี้ให้ได้! แต่ก่อนจะออกเดินทาง ขออะไรเติมพลังอย่างเมนูเห็ดหน่อยนะ~", menu: "mushroomGinger" },
+      { text: "ช่วงนี้ควบคุมน้ำหนัก...อยากกินมะเขือเทศเยอะ ๆ ขอแบบฟีลคลีน ๆ แต่ยังอร่อยอยู่~", menu: "tomaJib" },
+      { text: "อากาศดีแบบนี้ เหมาะกับการพักผ่อนและกินเมนูที่ชอบที่สุดเป็นของขวัญใจตัวเอง~", menu: "veggieHotpot" }
+    ],
+    image: "https://i.postimg.cc/XJR6fWwD/IMG-1478.png"
+  },
+  {
+    id: "cat002",
+    name: "ทองม้วน",
+    story: [
+      { text: "ฮัดเช่ย~ เมื่อวานตากฝนมาทั้งคืน อยากได้ซุปอุ่น ๆ ช่วยแก้หวัด", menu: "wheatSoup" },
+      { text: "เมื่อเช้าเจอน้องแมวตัวเล็กหิวโซ เลยสัญญาว่าจะไปหาของอร่อยอย่างมันฝรั่งมาแบ่งกันกิน!", menu: "patatoCorn" },
+      { text: "วันนี้ตามคุณแม่แมวไม่ทันเลย...ขอมื้ออร่อยอย่างโจ๊กอุ่น ๆ เป็นกำลังใจได้มั้ย? ใส่ผักเยอะ ๆ ได้เลยนะ!", menu: "riceSoup" },
+      { text: "ไม่อยากออกจากกล่องเลยวันนี้...แต่ได้กลิ่นซุปบรอกโคลีลอยมาจากฟาร์มนี้", menu: "broccoliSoup" },
+      { text: "เมื่อเช้าได้กลิ่นผักสด ๆ เลยอยากกินสลัดสดชื่น ๆ ที่เจ้าของฟาร์มทำให้กินจัง~", menu: "veggieFive" },
+      { text: "เขาบอกว่ากินเผ็ดก่อนนอนแล้วฝันสนุก...อยากลองดูคืนนี้! มีเมนูเผ็ด ๆ เหลือบ้างมั้ย?", menu: "hotSpicy" }
+    ],
+    image: "https://i.postimg.cc/CM8gFZ0y/IMG-1476.png"
+  },
+  {
+    id: "cat003",
+    name: "ลูกชุบ",
+    story: [
+      { text: "เมื่อวานแอบปีนไปดูหนังกลางแปลงมา...กลิ่นข้าวโพดทอดมันหอมไปหมดเลย~", menu: "friedCorn" },
+      { text: "วันนี้หนาวจัง อยากได้อะไรเผ็ด ๆ เล็กน้อย ให้หัวใจอบอุ่นขึ้นบ้าง~", menu: "chiliGinger" },
+      { text: "ไปนั่งฟังวงดนตรีนกกระจอกเล่นเพลงในสวนจนแดดร้อนหัว ขอสลัดข้าวโพดเย็น ๆ สดชื่น ๆ หน่อยเถอะนะ~", menu: "cornSalad" },
+      { text: "พอตื่นมาก็โดนคนส่งของเขย่าแรงมากเลย! ยังเวียนหัวอยู่เลย ขออะไรหอม ๆ กระเทียมปลอบใจหน่อยได้มั้ย?", menu: "bakedGarlic" },
+      { text: "ฟันน้ำนมเพิ่งหลุด...เคี้ยวไม่ไหวเลย ขอเมนูนุ่มนิ่ม ๆ อย่างมันฝรั่งหน่อยน้า~", menu: "potatoCorn" },
+      { text: "เห็นเพื่อนแมวได้กินของอร่อยจากฟาร์มนี้ เลยรีบวิ่งมาบ้าง หวังว่าจะมีบีทรูทเหลือให้เรานะ...", menu: "beetSalad" }
+    ],
+    image: "https://i.postimg.cc/V6Ldxjpc/IMG-1473.png"
+  },
+  {
+    id: "cat004",
+    name: "กะทิ",
+    story: [
+      { text: "กำลังจะไปเยี่ยมคุณยายที่ต่างหมู่บ้าน เลยแวะพักท้องหาซุปเบา ๆ ก่อนเดินทาง", menu: "herbSoup" },
+      { text: "วันนี้มีข่าวดีเลยอยากเลี้ยงตัวเองด้วยเมนูพิเศษ ๆ ที่มีผักหลายอย่างรวมกัน!", menu: "veggieHotpot" },
+      { text: "เมื่อวานวิ่งไล่แมลงในทุ่งข้าวจนเหนื่อย อยากกินอะไรหอม ๆ อุ่น ๆ สักถ้วยจัง~", menu: "bakedRice" },
+      { text: "เค้าว่ากินผักหลายสีจะสุขภาพดี~ ช่วยเลือกเมนูที่มีผักหลาย ๆ สีได้มั้ย", menu: "veggieFive" },
+      { text: "ตื่นเช้าเกินจนร้านอาหารยังไม่เปิด เดินไปเดินมาเจอฟาร์มนี้ พอจะมีซุปเห็ดหอม ๆ ให้ไหมนะ?", menu: "mushroomMedley" },
+      { text: "แมวที่แอบชอบชอบแมวหุ่นดี…เลยงดข้าวมา 1 วันเต็ม แต่ไม่ไหวแล้วอะ ขอกลับมากินสลัดกับเจ้าของฟาร์มก่อนนะ!", menu: "freshSalad" },
+      { text: "วันนี้ทำคลิปแมวใหม่ เพื่อน ๆ รอชมอยู่เลย! ถ้าได้เมนูสเต็กจะทำคลิปน่ารัก ๆ โปรโมทฟาร์มให้ดูเลยนะ~", menu: "threeSteak" }
+    ],
+    image: "https://i.postimg.cc/QMDBbLqC/IMG-1474.png"
+  },
+  {
+    id: "cat005",
+    name: "เปียกปูน",
+    story: [
+      { text: "คุณแม่เล่าว่าตอนเป็นลูกแมวเคยกินแกงหวานฟักทองแล้วหลับสบายมาก...อยากลองอีกจัง", menu: "godelSteam" },
+      { text: "กำลังจะไปเที่ยวตลาดน้ำ อยากได้ของว่างเบา ๆ พกง่าย ๆ ติดตัวไปด้วย~", menu: "friedCorn" },
+      { text: "ได้กลิ่นซุปผักกาด แล้วรู้สึกอบอุ่นยังไงก็ไม่รู้~", menu: "herbSoup" },
+      { text: "วันนี้ช่วยคุณยายจับปลาทั้งวัน เหนื่อยมาก! ขอข้าวตุ๋นดี ๆ เติมพลังหน่อยได้ไหม~", menu: "riceVeggie" },
+      { text: "โดนเพื่อนแมวท้ากินพริกแข่ง…ตอนนี้ลิ้นชามาก! ขอของกินเย็น ๆ อย่างเมนูที่มีแตงกวาช่วยชีวิตหน่อย", menu: "cornSalad" },
+      { text: "วันนี้มีแมวถามว่ากินอะไรมา ขนถึงสวย~ ก็เลยอยากมากินเมนูเดิมอีก! ขอแบบที่เราดูดีขึ้นอีกนิดนะ", menu: "godelSteam" },
+       { text: "เพิ่งเล่นซ่อนหาได้ที่หนึ่ง อยากให้รางวัลตัวเองด้วยเมนูอร่อย ๆ อย่างบีทรูทตุ๋นหน่อยนะ!", menu: "sweetBeetstew" }
+    ],
+    image: "https://i.postimg.cc/1X84tyyC/IMG-1471.png"
+  },
+  {
+    id: "cat006",
+    name: "เฉาก๊วย",
+    story: [
+      { text: "เล่นวิ่งไล่จับกับเพื่อนแมวมาทั้งวัน อยากได้อะไรสดชื่น เปรี้ยว ๆ หน่อย เอาไว้เติมพลัง!", menu: "tomaJib" },
+      { text: "คุณยายเคยบอกว่า บีทรูทดีต่อหัวใจ อยากลองชิมเมนูที่คุณยายชอบตอนยังสาว~", menu: "beetSalad" },
+      { text: "เพิ่งตื่นนอน...อยากได้อะไรอร่อย ๆ เผ็ดหน่อยก็ได้นะ จะได้สดใสทั้งวัน~", menu: "hotSpicy" },
+      { text: "ไปขุดสมบัติแถวสวนเก่า เจอแต่หินกับหนอน...เสียใจมาก ขออะไรหวาน ๆ อย่างบีทรูทปลอบใจหน่อยนะ~", menu: "sweetBeetstew" },
+      { text: "เจอแมวน่ารักที่สวนสาธารณะ อยากชวนมาชิมเมนูโปรดอย่างหม้อไฟแล้วเล่นด้วยกัน!", menu: "veggieHotpot" },
+      { text: "เมื่อวานลองเดินเล่นเจอพริกสด ๆ อยากให้เจ้าของฟาร์มช่วยทำเมนูเผ็ด ๆ ให้หน่อยนะ!", menu: "chiliGinger" },
+      { text: "เพิ่งกลับจากปีนต้นไม้ เก็บเมล็ดข้าวโพดมาได้! เลยเอามาฝากให้เจ้าของฟาร์มทำเมนูอร่อยอย่างสลัดให้หน่อย", menu: "cornSalad" }
+    ],
+    image: "https://i.postimg.cc/t4qQt2xy/IMG-1475.png"
+  },
+  {
+    id: "cat007",
+    name: "ทูน่า",
+    story: [
+      { text: "หลับเพลินจนตื่นบ่าย หิวมาก! อยากกินมันบดนิ่ม ๆ ที่เคยลองเมื่อนานมาแล้ว~", menu: "potatoPui" },
+      { text: "วันนี้โดนแดดร้อน ๆ มาทั้งวัน ถ้าได้อะไรเย็น ๆ กรอบ ๆ เคี้ยวเพลินคงดีมากเลย~", menu: "freshSalad" },
+      { text: "มะเขือม่วงกับพริก? ฟังดูเผ็ด...แต่ก็อยากลอง!", menu: "eggplantSoft" },
+      { text: "วันนี้ตั้งใจจะเอาของกินไปฝากแมวที่แอบชอบ แต่ในตะกร้าดันมีแต่เศษใบไม้… ขอยืมของอร่อยที่มีผักสามชนิดหน่อยได้มั้ย?", menu: "threeSteak" },
+      { text: "พยายามทำท่าเต้นโชว์เพื่อนแมว แต่ล้มคว่ำไปสองรอบแล้ว! ขอเมนูอร่อย ๆ ที่มีเห็ดกับกระเทียม เติมแรงหน่อย~", menu: "mushroomGinger" },
+      { text: "ไปขุดสวนเล่น เจอหัวไชเท้าเพียบ! แต่กินดิบไม่ไหว ช่วยปรุงให้หน่อยได้มั้ย~", menu: "radishSoup" },
+      { text: "วันนี้มีถ่ายคลิปเต้นสุดน่ารัก แต่งานหนักต้องเติมพลังด้วยเมนูโจ๊กใส่ผักเยอะ ๆ ก่อน!", menu: "riceSoup" }
+    ],
+    image: "https://i.postimg.cc/wMD8Fr2x/IMG-1477.png"
+  },
+  {
+    id: "cat008",
+    name: "บัวลอย",
+    story: [
+      { text: "กลับจากเดินป่ากับเพื่อนแมว เหนื่อยสุด ๆ เลย อยากได้อะไรบำรุงร่างกายหน่อย...เห็นว่าเมนูเห็ดมีประโยชน์~", menu: "mushrromMedley" },
+      { text: "วันนี้อากาศดี...อยากกินของหวานที่ใส่ฟักทอง", menu: "sweetPumpkin" },
+      { text: "แมวขี้เกียจอย่างเราชอบมันฝรั่งนิ่ม ๆ มาก!", menu: "potatoPui" },
+      { text: "เคยลองซุปหัวไชเท้าตอนฝนตกแล้วรู้สึกสบายใจมาก อยากกินอีกจัง~", menu: "radishSoup" },
+      { text: "เห็นแมวตัวใหญ่กินของเผ็ดกันเก่งมาก อยากลองบ้าง! มีเมนูเผ็ดนิด ๆ ให้ฝึกความเท่ไหม?", menu: "hotSpicy" },
+      { text: "วันนี้ออกไปเดินเล่น อยู่ดี ๆ ฝนก็ตกลงมาหนักมาก ขอที่หลบฝนพร้อมซุปกะหล่ำปลีอุ่น ๆ หน่อยได้มั้ย?", menu: "cabbageSoup" },
+      { text: "เมื่อคืนไปถ่ายคลิปท้าผีตอนตี 3...กลายเป็นคลิปวิ่งหนีไม้กวาดแทน แต่คนดูชอบนะ ยอดวิวขึ้นเป็นพันเลย! วันนี้เลยจะเปลี่ยนเป็นคอนเทนต์กินผัก 5 สีแทน", menu: "veggieFive" }
+    ],
+    image: "https://i.postimg.cc/B6YX4jfP/IMG-1472.png"
+  }
+];
+
+function openHerbalKitchen() {
+  let html = `<div class="herbal-kitchen-title"></div>`;
+
+  [...herbalMenus].sort((a, b) => {
+    const canMakeA = a.ingredients.every(ing => (player.inventory[ing] || 0) >= a.ingredients.filter(i => i === ing).length);
+    const canMakeB = b.ingredients.every(ing => (player.inventory[ing] || 0) >= b.ingredients.filter(i => i === ing).length);
+    return (canMakeB === true) - (canMakeA === true); // true > false → ให้เมนูที่ปรุงได้ขึ้นก่อน
+  }).forEach(menu => {
+    const ingredientCount = {};
+    menu.ingredients.forEach(key => {
+      ingredientCount[key] = (ingredientCount[key] || 0) + 1;
+    });
+
+    const canMake = Object.entries(ingredientCount).every(([key, count]) =>
+      (player.inventory[key] || 0) >= count
+    );
+
+    html += `
+      <div class="herbal-menu-card-row">
+        <div class="menu-image"></div>
+        <div class="menu-info">
+          <div class="menu-name"><b>${menu.name}</b></div>
+          <div class="menu-ingredients">
+            ${Object.keys(ingredientCount).map(key => `
+              <span class="ingredient-item">
+                <div class="ingredient-icon" style="background-image: url('${ingredientImages[thaiNames[key]] || defaultImage}')"></div>
+                (${player.inventory[key] || 0}/${ingredientCount[key]})
+              </span>
+            `).join(' + ')}
+          </div>
+          <div class="menu-owned">มีอยู่: ${player.herbalInventory?.[menu.id] || 0} ถ้วย</div>
+        </div>
+        <div class="menu-action">
+          <button onclick="craftHerbalMenu('${menu.id}')" ${canMake ? "" : "disabled"}>ปรุง</button>
+        </div>
+      </div>
+    `;
+  });
+
+  showPopup(html, 'herbal-kitchen');
+}
+
+
+function craftHerbalMenu(menuId) {
+  const menu = herbalMenus.find(m => m.id === menuId);
+  if (!menu) return;
+
+  for (let ing of menu.ingredients) {
+    if (!player.inventory[ing] || player.inventory[ing] < 1) {
+      showTemporaryMessage("วัตถุดิบไม่พอ", 2000);
+      return;
+    }
+  }
+
+  menu.ingredients.forEach(ing => {
+    player.inventory[ing]--;
+  });
+
+  if (!player.herbalInventory) player.herbalInventory = {};
+  player.herbalInventory[menuId] = (player.herbalInventory[menuId] || 0) + 1;
+
+  player.exp = (player.exp || 0) +(menu.exp || 10);
+
+  player.herbalCookCount = (player.herbalCookCount || 0) + 1;
+  checkQuests();
+
+  showTemporaryMessage(`ได้ "${menu.name}" แล้ว!`, 2500);
+
+    const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+
+  openHerbalKitchen();
+}
+
+function openNeighborPopup() {
+  if (!currentVisitingCat) {
+    showMessage("ยังไม่มีแมวมาเยี่ยมตอนนี้");
+    return;
+  }
+
+  const currentCat = currentVisitingCat;
+  const availableMenus = getAvailableHerbalMenus(); // เฉพาะเมนูที่มีในคลัง
+  if (availableMenus.length === 0) {
+    showMessage("ไม่มีเมนูอาหารในครัวเลย ลองปรุงอาหารก่อนนะ");
+    return;
+  }
+
+  let selectedIndex = 0;
+
+  function renderSelectedMenu() {
+    const menu = availableMenus[selectedIndex];
+    const qty = player.herbalInventory?.[menu.id] || 0;
+
+    return `
+<div class="menu-cat-header">
+  <div class="menu-cat-name">${menu.name}</div>
+</div>
+<div class="menu-in">มีอยู่: ${qty} ถ้วย</div>
+<button class="menu-cat-select" onclick="selectMenuForCat('${menu.id}', '${currentCat.id}')">
+  ส่งอาหารให้แมว
+</button>
+    `;
+  }
+
+  window.changeMenu = function (delta) {
+    selectedIndex = (selectedIndex + delta + availableMenus.length) % availableMenus.length;
+    const menuContainer = document.getElementById("menu-card-container");
+    if (menuContainer) {
+      menuContainer.innerHTML = renderSelectedMenu();
+    }
+  };
+
+  // เริ่มต้นแสดง popup
+  let html = `
+    <div class="cat-visit-story">
+      <img src="${currentCat.image}" class="cat-image">
+      <div class="cat-name">${currentCat.name} :</div>
+      <div style="margin:10px 0;">"${currentCat.displayStory}"</div>
+    </div>
+    <div class="cat-select">เลือกเมนูอาหารที่จะให้แมว :</div>
+    <div class="cat-menu-wrapper">
+      <button class="cat-left" onclick="changeMenu(-1)"></button>
+      <div id="menu-card-container">
+        ${renderSelectedMenu()}
+      </div>
+      <button class="cat-right" onclick="changeMenu(1)"></button>
+    </div>
+  `;
+  showPopup(html, 'neighbor-cat');
+}
+
+let currentVisitingCat = null;
+let catComingTimer = null;
+
+function scheduleNextCatVisit() {
+  if (catComingTimer) clearTimeout(catComingTimer);
+
+  const delay = 60_000 + Math.random() * 60_000;
+
+  catComingTimer = setTimeout(() => {
+    currentVisitingCat = getCurrentVisitingCat();
+    showMessage("มีเสียงแมวร้องอยู่แถว ๆ นี้...");
+  }, delay);
+}
+
+function selectMenuForCat(menuId, catId) {
+  if (!player.herbalInventory[menuId] || player.herbalInventory[menuId] < 1) {
+    showTemporaryMessage("คุณไม่มีเมนูนี้ในคลัง", 2000);
+    return;
+  }
+
+  const cat = cats.find(c => c.id === catId);
+  const isCorrect = cat.story.some(s => s.menu === menuId);
+
+  // หักเมนูออกจากคลัง
+  player.herbalInventory[menuId]--;
+
+  if (isCorrect) {
+    player.exp = (player.exp || 0) + 20;
+    showTemporaryMessage(`ขอบคุณมาก! ไว้จะกลับมาเยี่ยมนะ (EXP +20)`, 3000);
+
+    player.catFedCount = (player.catFedCount || 0) + 1;
+    checkQuests(); 
+  } else {
+    showTemporaryMessage(`แมวยังไม่ดีขึ้น ลองเมนูอื่นครั้งหน้า`, 3000);
+  }
+
+  // เก็บบันทึกการเยี่ยม
+  if (!player.catVisits) player.catVisits = [];
+  player.catVisits.push({ catId, menuId, correct: isCorrect });
+
+  // ล้างแมวตัวปัจจุบัน
+  currentVisitingCat = null;
+
+  scheduleNextCatVisit()
+
+  const playerName = localStorage.getItem("playerName");
+  if (playerName) {
+    google.script.run.savePlayer(playerName, player);
+  }
+
+  closePopup();
+}
+
+function getCurrentVisitingCat() {
+  if (!player.catVisits) player.catVisits = [];
+
+  // ✅ 1. หาผักที่ปลดล็อกแล้วตามเลเวล
+  const unlockedCrops = Object.keys(seedUnlockLevels).filter(
+    crop => player.level >= seedUnlockLevels[crop]
+  );
+
+  // ✅ 2. หาว่าเมนูไหนที่ผู้เล่นสามารถทำได้ (จากผักที่ปลดล็อก)
+  const unlockedMenus = herbalMenus.filter(menu =>
+    menu.ingredients.every(ing => unlockedCrops.includes(ing))
+  );
+  const unlockedMenuIds = unlockedMenus.map(m => m.id);
+
+  // ✅ 3. เลือกเฉพาะแมวที่ยังไม่มาเยี่ยม และมีเมนูตรงกับของที่เราทำได้
+  const visitedIds = player.catVisits.map(v => v.catId);
+  const validCats = cats.filter(cat => {
+    if (visitedIds.includes(cat.id)) return false;
+    const validStories = (cat.story || []).filter(s =>
+      unlockedMenuIds.includes(s.menu)
+    );
+    return validStories.length > 0;
+  });
+
+  let selectedCat;
+
+  if (validCats.length > 0) {
+    // ✅ ยังมีแมวที่ตรงเงื่อนไข — สุ่มมา
+    selectedCat = validCats[Math.floor(Math.random() * validCats.length)];
+  } else {
+    // ✅ ถ้าไม่มีเลย (แปลว่าแมวหมดหรือไม่มีเมนูที่ปลดล็อก) — ส่ง null กลับ
+    return null;
+  }
+
+  // ✅ เลือก story ที่ผู้เล่นสามารถทำได้จริง
+  const validStories = (selectedCat.story || []).filter(s =>
+    unlockedMenuIds.includes(s.menu)
+  );
+
+  if (validStories.length > 0) {
+    const picked = validStories[Math.floor(Math.random() * validStories.length)];
+    selectedCat.displayStory = picked.text;
+    selectedCat.requestedMenu = picked.menu; // ✅ เก็บเมนูไว้ใช้ภายหลัง
+  } else {
+    // ไม่ควรเกิดขึ้นถ้า filter ด้านบนทำงานถูกต้อง
+    selectedCat.displayStory = "แมวอยากได้เมนูที่คุณยังปลดล็อกไม่ได้...";
+  }
+
+  return selectedCat;
+}
+
+function getAvailableHerbalMenus() {
+  return herbalMenus.filter(menu => (player.herbalInventory?.[menu.id] || 0) > 0);
+}
+
+
+function openSettingsPopup() {
+  const playerName = localStorage.getItem("playerName") || "ไม่ทราบชื่อ";
+  const html = `
+    <div class="player-name">ชื่อผู้ใช้ : ${playerName}</div>
+    <div class="sound-toggle">
+      <span>เสียง BGM</span>
+      <button id="toggleSoundBtn"><img id="soundIcon" src="https://i.postimg.cc/25x78Tj2/sound-on.png"></button>
+    </div>
+    <div class="contact-support">
+    <button onclick="contactSupport()" class="contact">สอบถามหรือแจ้งปัญหา</button>
+    </div>
+    
+  `;
+  showPopup(html, 'settings');
+
+  setTimeout(() => {
+    const toggleBtn = document.getElementById("toggleSoundBtn");
+    const soundIcon = document.getElementById("soundIcon");
+    const bgm = document.getElementById("bg-music");
+
+    function updateToggleIcon() {
+      if (bgm.muted) {
+        soundIcon.src = "https://i.postimg.cc/tTSdFTx6/sound-off.png";
+        soundIcon.alt = "ปิดเสียง";
+      } else {
+        soundIcon.src = "https://i.postimg.cc/25x78Tj2/sound-on.png";
+        soundIcon.alt = "เปิดเสียง";
+      }
+    }
+
+    toggleBtn.addEventListener("click", () => {
+      bgm.muted = !bgm.muted;
+      updateToggleIcon();
+      if (!bgm.muted) {
+        bgm.play().catch(() => {});
+      } else {
+        bgm.pause();
+      }
+    });
+
+    updateToggleIcon(); // ตั้ง icon ให้ตรงกับสถานะเริ่มต้น
+  }, 0);
+}
+
+function contactSupport() {
+  window.open('https://lin.ee/0gSn7gC', '_blank');
+}
+
+function formatTimeLeft(ms) {
+  const totalSeconds = Math.ceil(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+
+  if (minutes > 0) {
+    return `${minutes} นาที ${seconds} วินาที`;
+  } else {
+    return `${seconds} วินาที`;
+  }
+}
+
+function renderPlots() {
+  if (!player || !player.plots) return;
+
+  checkDailySalesReset();
+  const farms = document.querySelectorAll('.farm-background');
+
+  for (let farmIndex = 0; farmIndex < farms.length; farmIndex++) {
+    const farm = farms[farmIndex];
+    farm.innerHTML = '';
+
+    for (let i = 0; i < 8; i++) {
+      const plotIndex = farmIndex * 8 + i;
+      const plotData = player.plots[plotIndex] || {
+        unlockedSlots: 0,
+        planted: [false, false, false, false]
+      };
+
+      const plot = document.createElement('div');
+      plot.className = 'plot';
+
+      // แปลงที่ 1 (index 0): ใช้งานได้บางช่อง
+      if (plotIndex === 0) {
+        plotData.unlockedSlots = Math.max(plotData.unlockedSlots, 1); // กันไว้กรณี reset แล้วหลุด
+        for (let j = 0; j < 4; j++) {
+          const slot = document.createElement("div");
+          slot.className = "slot";
+
+          if (j >= plotData.unlockedSlots) {
+            slot.classList.add("locked");
+            slot.onclick = () => askQuestion(plotIndex, j);
+          } else if (!plotData.planted[j]) {
+            slot.innerHTML = "+";
+            slot.onclick = () => openPlantSelector(plotIndex, j);
+          } else {
+            const plantObj = plotData.planted[j];
+            const img = document.createElement("img");
+            const now = Date.now();
+            const timePassed = now - (plantObj.plantedAt || 0);
+
+            if (plantObj.status === "growing") {
+              const totalGrowTime = growTimes[plantObj.type] || 30000;
+              if (timePassed >= totalGrowTime) {
+                plantObj.status = "done";
+                img.src = imageUrls[plantObj.type];
+                slot.onclick = () => harvest(plotIndex, j);
+              } else {
+                img.src = imageUrls["seedling"];
+                  const timeLeft = totalGrowTime - timePassed;
+                  slot.onclick = () => showMessage(`ต้องรออีก ${formatTimeLeft(timeLeft)} ถึงจะเก็บได้`);
+              }
+            } else {
+              img.src = imageUrls[plantObj.type];
+              slot.onclick = () => harvest(plotIndex, j);
+            }
+
+            slot.appendChild(img);
+          }
+
+          plot.appendChild(slot);
+        }
+
+      // แปลง 2–8 (index 1–7): เป็นแปลงใหญ่ที่ล็อกหรือปลดล็อกทั้งแปลง
+      } else if (plotIndex > 0 && plotIndex < 8) {
+        if (plotData.unlockedSlots < 4) {
+          plot.classList.add("locked");
+          plot.onclick = () => askQuestion(plotIndex);
+        } else {
+          for (let j = 0; j < 4; j++) {
+            const slot = document.createElement("div");
+            slot.className = "slot";
+
+            if (!plotData.planted[j]) {
+              slot.innerHTML = "+";
+              slot.onclick = () => openPlantSelector(plotIndex, j);
+            } else {
+              const plantObj = plotData.planted[j];
+              const img = document.createElement("img");
+              const now = Date.now();
+              const timePassed = now - (plantObj.plantedAt || 0);
+
+              if (plantObj.status === "growing") {
+                const totalGrowTime = growTimes[plantObj.type] || 30000;
+                if (timePassed >= totalGrowTime) {
+                  plantObj.status = "done";
+                  img.src = imageUrls[plantObj.type];
+                  slot.onclick = () => harvest(plotIndex, j);
+                } else {
+                  img.src = imageUrls["seedling"];
+                  const timeLeft = totalGrowTime - timePassed;
+                  slot.onclick = () => showMessage(`ต้องรออีก ${formatTimeLeft(timeLeft)} ถึงจะเก็บได้`);
+                }
+              } else {
+                img.src = imageUrls[plantObj.type];
+                slot.onclick = () => harvest(plotIndex, j);
+              }
+
+              slot.appendChild(img);
+            }
+
+            plot.appendChild(slot);
+          }
+        }
+
+      // แปลง 9–24 (index 8–23): เป็นที่ดินที่ต้องซื้อ
+      } else {
+        if (plotData.unlockedSlots < 4) {
+          plot.style.backgroundImage = "url('https://i.postimg.cc/hjHWDjXf/soil.png')";
+          plot.onclick = () => openBuyLand(plotIndex);
+        } else {
+          // ถ้าซื้อแล้ว ให้แสดงช่องปลูกปกติ
+          for (let j = 0; j < 4; j++) {
+            const slot = document.createElement("div");
+            slot.className = "slot";
+
+            if (!plotData.planted[j]) {
+              slot.innerHTML = "+";
+              slot.onclick = () => openPlantSelector(plotIndex, j);
+            } else {
+              const plantObj = plotData.planted[j];
+              const img = document.createElement("img");
+              const now = Date.now();
+              const timePassed = now - (plantObj.plantedAt || 0);
+
+              if (plantObj.status === "growing") {
+                const totalGrowTime = growTimes[plantObj.type] || 30000;
+                if (timePassed >= totalGrowTime) {
+                  plantObj.status = "done";
+                  img.src = imageUrls[plantObj.type];
+                  slot.onclick = () => harvest(plotIndex, j);
+                } else {
+                  img.src = imageUrls["seedling"];
+                  const timeLeft = totalGrowTime - timePassed;
+                  slot.onclick = () => showMessage(`ต้องรออีก ${formatTimeLeft(timeLeft)} ถึงจะเก็บได้`);
+                }
+              } else {
+                img.src = imageUrls[plantObj.type];
+                slot.onclick = () => harvest(plotIndex, j);
+              }
+
+              slot.appendChild(img);
+            }
+
+            plot.appendChild(slot);
+          }
+        }
+      }
+
+      farm.appendChild(plot);
+    }
+  }
+}
+
+let plantPage = 0;
+let lastPlotIndex = null;
+let lastSlotIndex = null;
+
+function openPlantSelector(plotIndex, slotIndex) {
+  const plantTitle = document.getElementById("plant-title");
+  if (plantTitle) plantTitle.style.display = "block"
+  lastPlotIndex = plotIndex;
+  lastSlotIndex = slotIndex;
+  plantPage = 0;
+  renderPlantPage(plotIndex, slotIndex);
+}
+
+function renderPlantPage(plotIndex, slotIndex) {
+  const plantTitle = document.getElementById("plant-title");
+  if (plantTitle) plantTitle.style.display = "block";
+
+  const items = [];
+
+  for (const [item, count] of Object.entries(player.inventory)) {
+    if (count > 0) {
+      const isSeed = item.endsWith("Seed");
+      const baseType = item.replace("Seed", "");
+      const imgSrc = isSeed ? imageUrlsSeed[baseType] : imageUrls[baseType];
+
+      if (imgSrc) {
+        items.push({ item, count, baseType, isSeed, imgSrc });
+      }
+    }
+  }
+
+  const start = plantPage * 12;
+  const pageItems = items.slice(start, start + 12);
+
+  let html = `<div class="inventory-grid">`;
+
+  for (const { item, count, baseType, isSeed, imgSrc } of pageItems) {
+    html += `
+      <div class="inventory-item" onclick="plant(${plotIndex}, ${slotIndex}, '${baseType}', ${isSeed})">
+        <div class="inventory-count">x${count}</div>
+        <img src="${imgSrc}" alt="${baseType}">
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+
+  if (items.length === 0) {
+    html = `<div class="no-items-center"><p>ไม่มีผักหรือเมล็ดในคลัง</p></div>`;
+  } else {
+  // ✅ ปุ่มซ้าย-ขวาเลื่อนหน้า
+  const hasPrev = plantPage > 0;
+  const hasNext = (start + 12) < items.length;
+
+  html += `
+    <div class="inventory-nav">
+      <button class="up-btn" onclick="if(${hasPrev}){ plantPage--; renderPlantPage(${plotIndex}, ${slotIndex}); }" ${!hasPrev ? "disabled" : ""}></button>
+      <button class="down-btn" onclick="if(${hasNext}){ plantPage++; renderPlantPage(${plotIndex}, ${slotIndex}); }" ${!hasNext ? "disabled" : ""}></button>
+    </div>
+  `;
+}
+  showPopup(html, 'plant');
+}
+
+function plant(plotIndex, slotIndex, type, isSeed = false) {
+  closePopup();
+
+  const seedKey = type + "Seed";
+  const productKey = type;
+  const farm = player.plots[plotIndex];
+
+  if (farm.planted[slotIndex]) {
+    showMessage("ช่องนี้มีพืชอยู่แล้ว!");
+    return;
+  }
+
+  if (isSeed && (player.inventory[seedKey] || 0) > 0) {
+    player.inventory[seedKey] -= 1;
+  } else if (!isSeed && (player.inventory[productKey] || 0) > 0) {
+    player.inventory[productKey] -= 1;
+  } else {
+    showMessage(`ไม่มี ${type} หรือเมล็ด ${type} ในคลัง`);
+    return;
+  }
+
+  farm.planted[slotIndex] = {
+    type: type,
+    status: "growing",
+    plantedAt: Date.now()
+  };
+
+   const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+
+  renderPlots();
+  checkQuests();
+
+  setTimeout(() => {
+    const plantObj = player.plots[plotIndex].planted[slotIndex];
+    if (!plantObj || plantObj.status !== "growing") return;
+
+    plantObj.status = "done";
+    updateHUD();
+    renderPlots();
+    checkQuests();
+  }, growTimes[type] || 30000);
+}
+
+
+function harvest(plotIndex, slotIndex) {
+  const plantObj = player.plots[plotIndex].planted[slotIndex];
+
+  if (!plantObj || plantObj.status !== "done") {
+    showMessage("ยังเก็บเกี่ยวไม่ได้!");
+    return;
+  }
+
+  const type = plantObj.type;
+  player.plots[plotIndex].planted[slotIndex] = false;
+  player.inventory[type] = (player.inventory[type] || 0) + 2;
+
+  // เพิ่ม EXP เวลาปลูกเก็บผัก
+  gainExp(5);  // กำหนดจำนวน EXP ตามต้องการ
+
+  const playerName = localStorage.getItem("playerName");
+  if (playerName) {
+    google.script.run.savePlayer(playerName, window.player);
+  }
+
+  updateHUD();
+  renderPlots();
+  checkQuests();
+}
+
+const quizQuestions = [
+  {
+    question: "ข้อใดไม่ใช่พฤติกรรมที่เสี่ยงต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["รับประทานอาหารไขมันสูง", "ดื่มแอลกอฮอล์ปริมาณมาก", "ออกกำลังกายสม่ำเสมอ"],
+    correctIndex: 2
+  },
+  {
+    question: "การดื่มชาและกาแฟมากกว่า 6 แก้วต่อวันอาจก่อให้เกิดผลกระทบใด?",
+    choices: ["ทำให้นอนหลับดีขึ้น", "ช่วยลดความดันโลหิต", "อาจทำให้หัวใจเต้นเร็วและนอนไม่หลับ"],
+    correctIndex: 2
+  },
+  {
+    question: "การรับประทานอาหารประเภทใดไม่เสี่ยงต่อการเป็นโรคหลอดเลือดหัวใจ?",
+    choices: ["ประเภทไขมันต่ำ", "ประเภททอด", "อาหารรสเค็ม"],
+    correctIndex: 0
+  },
+  {
+    question: "ข้อใดเป็นอาการของโรคหลอดเลือดหัวใจ?",
+    choices: ["อาการชัก หมดสติ", "เจ็บหน้าอกร้าวไปไหล่ซ้ายและแขนซ้าย", "ตาพร่า เวียนหัวแบบบ้านหมุน"],
+    correctIndex: 1
+  },
+  {
+    question: "พฤติกรรมใดที่เพิ่มความเสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจมากที่สุด?",
+    choices: ["สูบบุหรี่เป็นประจำ", "นอนหลับวันละ 8 ชั่วโมง", "ดื่มน้ำเปล่าอย่างเพียงพอ"],
+    correctIndex: 0
+  },
+  {
+    question: "ข้อใดต่อไปนี้คือปัจจัยเสี่ยงของโรคหลอดเลือดหัวใจ?",
+    choices: ["การออกกำลังกายเป็นประจำ", "การรับประทานอาหารไขมันต่ำ", "ความดันโลหิตสูงและไขมันในเลือดสูง"],
+    correctIndex: 2
+  },
+  {
+    question: "อาหารใดต่อไปนี้จัดว่าเป็นอาหารไขมันต่ำและดีต่อสุขภาพหัวใจ?",
+    choices: ["ไส้กรอกทอด หมูสามชั้น", "ธัญพืช ปลาเนื้อขาว นมพร่องมันเนย", "เค้กครีม ชานมไข่มุก"],
+    correctIndex: 1
+  },
+  {
+    question: "ข้อใดคือประเภทการออกกำลังกายที่เหมาะสมที่สุดในการป้องกันโรคหลอดเลือดหัวใจ?",
+    choices: ["การยืดกล้ามเนื้อ", "การยกน้ำหนัก", "การออกกำลังกายแบบแอโรบิก เช่น เดินเร็ว"],
+    correctIndex: 2
+  },
+  {
+    question: "อาการใดต่อไปนี้เป็นสัญญาณของโรคหลอดเลือดหัวใจ?",
+    choices: ["เจ็บหน้าอกเฉียบพลันขณะทำกิจกรรม", "ปวดกล้ามเนื้อทั่วร่างกาย", "ปวดหัวเฉียบพลัน"],
+    correctIndex: 0
+  },
+  {
+    question: "ข้อใดเป็นผลกระทบของโรคหลอดเลือดหัวใจที่มีต่อการใช้ชีวิตประจำวัน?",
+    choices: ["ทำให้อารมณ์ดีขึ้น", "เพิ่มความสามารถในการออกกำลังกาย", "เหนื่อยง่ายและไม่สามารถทำกิจกรรมหนักได้เหมือนเดิม"],
+    correctIndex: 2
+  }
+];
+
+function askQuestion(plotIndex, slotIndex = null) {
+  if (!player.answeredQuestions) {
+    player.answeredQuestions = [];
+  }
+
+  const unanswered = quizQuestions
+    .map((q, index) => ({ q, index }))
+    .filter(({ index }) => !player.answeredQuestions.includes(index));
+
+  const { q, index } = unanswered[Math.floor(Math.random() * unanswered.length)];
+  const letters = ['A', 'B', 'C'];
+  const choicesText = q.choices.map((choice, i) => `${letters[i]}. ${choice}`).join("\n");
+  const correctLetter = letters[q.correctIndex];
+
+  const html = `
+    <p class="quiz-q">ตอบคำถามเพื่อปลดล็อกแปลง</p>
+    <p class="quiz-qq">${q.question}</p>
+    <div class="quiz-choices">${choicesText}</div>
+    <input id="quizAnswer" type="text" maxlength="1" placeholder="พิมพ์อักษรคำตอบที่ถูกต้อง" class="quiz-input">
+    <br>
+    <button onclick="submitQuizAnswer('${correctLetter}', ${plotIndex}, ${slotIndex === null ? 'null' : slotIndex}, ${index})" class="quiz-btn">
+      <span>ตอบคำถาม</span>
+    </button>
+  `;
+
+  showPopup(html, 'question');
+}
+
+function submitQuizAnswer(correctLetter, plotIndex, slotIndex, questionIndex) {
+  const userAnswer = document.getElementById('quizAnswer').value.trim().toUpperCase();
+
+  if (!['A', 'B', 'C'].includes(userAnswer)) {
+    showMessage("กรุณากรอก A, B หรือ C เท่านั้น");
+    return;
+  }
+
+  closePopup();
+
+  const correct = (userAnswer === correctLetter);
+
+  if (correct && !player.answeredQuestions.includes(questionIndex)) {
+    player.answeredQuestions.push(questionIndex);
+    updateGameData(); // ✅ บันทึกลง Google Sheet
+  }
+
+  if (slotIndex === null) {
+    unlockWholePlot(plotIndex, correct);
+  } else {
+    unlockSlot(plotIndex, slotIndex, correct);
+  }
+}
+
+function unlockSlot(plotIndex, slotIndex, correct) {
+  closePopup();
+  if (correct) {
+    player.plots[plotIndex].unlockedSlots++;
+    showMessage("ปลดล็อกแปลงดินสำเร็จ");
+    renderPlots();
+    checkQuests();
+
+    const playerName = localStorage.getItem("playerName");
+    if (playerName) {
+      google.script.run.savePlayer(playerName, player);
+    }
+
+  } else {
+    showMessage("ตอบผิดจ้า ลองใหม่นะ");
+  }
+}
+
+function unlockWholePlot(plotIndex, correct) {
+  closePopup();
+  if (correct) {
+    player.plots[plotIndex].unlockedSlots = 4;
+    showMessage("ปลดล็อกแปลงดินสำเร็จ!");
+    renderPlots();
+    checkQuests();
+
+    const playerName = localStorage.getItem("playerName");
+    if (playerName) {
+      google.script.run.savePlayer(playerName, player);
+    }  
+      
+  } else {
+    showMessage("ตอบผิดจ้า ลองใหม่นะ");
+  }
+}
+
+      // popup สำหรับคลังเก็บ
+let inventoryPage = 0;
+
+function openInventory() {
+  const inventoryTitle = document.getElementById("inventory-title");
+  if (inventoryTitle) inventoryTitle.style.display = "block";
+  inventoryPage = 0;
+  renderInventoryPage();
+}
+
+function renderInventoryPage() {
+  const inventory = player.inventory;
+  const items = [];
+
+  for (const [item, count] of Object.entries(inventory)) {
+    if (count > 0) {
+      const isSeed = item.endsWith("Seed");
+      const baseType = item.replace("Seed", "");
+      const imgSrc = isSeed ? imageUrlsSeed[baseType] : imageUrls[baseType];
+      items.push({ item, count, imgSrc });
+    }
+  }
+
+  const start = inventoryPage * 12;
+  const pageItems = items.slice(start, start + 12);
+
+  let html = `
+    <div class="inventory-grid">
+  `;
+
+  for (const { item, count, imgSrc } of pageItems) {
+    html += `
+      <div class="inventory-item">
+        <div class="inventory-count">x${count}</div>
+        <img src="${imgSrc}" alt="${item}">
+      </div>
+    `;
+  }
+
+  html += `</div>`;
+
+  // ถ้าไม่มีไอเทม
+  if (items.length === 0) {
+    html = `<div class="no-items-center"><p>ไม่มีผักหรือเมล็ดในคลัง</p></div>`;
+  } else {
+    // เพิ่มปุ่มเลื่อนหน้า
+    html += `
+      <div class="inventory-nav">
+        <button id="inventory-prev" class="up-btn" ${inventoryPage === 0 ? "disabled" : ""}></button>
+        <button id="inventory-next" class="down-btn" ${(start + 12 >= items.length) ? "disabled" : ""}></button>
+      </div>
+    `;
+  }
+
+  showPopup(html, 'inventory');
+
+  // รอ popup แสดงก่อนแล้วค่อยผูก event กับปุ่ม
+  setTimeout(() => {
+    const prevBtn = document.getElementById("inventory-prev");
+    const nextBtn = document.getElementById("inventory-next");
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (inventoryPage > 0) {
+          inventoryPage--;
+          renderInventoryPage();
+        }
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        if ((start + 12) < items.length) {
+          inventoryPage++;
+          renderInventoryPage();
+        }
+      });
+    }
+  }, 0);
+}
+
+function inventoryPageUp() {
+  const totalItems = Object.entries(player.inventory).filter(([_, count]) => count > 0).length;
+  const maxPage = Math.floor((totalItems - 1) / 12);
+  if (inventoryPage < maxPage) {
+    inventoryPage++;
+    renderInventoryPage();
+  }
+}
+
+      // popup สำหรับร้านค้า
+function openShop() {
+  let html = `
+    <button class="shop-main-button" onclick="openBuyPopup()">
+      <img src="https://i.postimg.cc/XN5zr4tT/button.png">
+      <span>ซื้อผัก</span>
+    </button>
+    <button class="sell-main-button" onclick="openSellPopup()">
+      <img src="https://i.postimg.cc/XN5zr4tT/button.png">
+      <span>ขายผัก</span>
+    </button>
+  `;
+  showPopup(html, 'shop');
+}
+
+function openBuyPopup() {
+  let html = `<div class="shop-grid">`;
+
+  Object.keys(imageUrlsSeed).forEach(type => {
+    const price = seedPrices[type] || 10;
+    const unlockLevel = seedUnlockLevels[type] || 1;
+    const locked = player.level < unlockLevel;
+
+    html += `
+      <div class="shop-item ${locked ? 'locked no-lock-icon' : ''}" ${locked ? '' : `onclick="buySeed('${type}')"`}>
+        <img src="${imageUrlsSeed[type]}" alt="${type}" style="${locked ? 'opacity: 0.4;' : ''}">
+        <div>${thaiNames[type] || type}</div>
+        <div class="price">${locked ? `ปลดล็อกที่เลเวล ${unlockLevel}` : `${price} ฿`}</div>
+      </div>
+    `;
+  });
+
+  html += `
+    </div>
+    <div class="popup-footer">
+      <button class="back-button" onclick="openShop()">
+      <span>กลับ</span>
+      </button>
+    </div>
+  `;
+
+  showPopup(html, 'shop-pop');
+}
+
+function buySeed(type) {
+  const unlockLevel = seedUnlockLevels[type] || 1;
+  if (player.level < unlockLevel) {
+    showMessage(`ต้องเลเวล ${unlockLevel} ขึ้นไปเพื่อซื้อ ${thaiNames[type] || type}`);
+    return;
+  }
+
+  const seedKey = type + "Seed";
+  if (!player.inventory[seedKey]) player.inventory[seedKey] = 0;
+
+  const price = seedPrices[type] || 5;
+  if (player.coin < price) {
+    showMessage("เงินไม่พอซื้อเมล็ด!");
+    return;
+  }
+
+  player.inventory[seedKey] += 1;
+  player.coin -= price;
+  updateHUD();
+
+  showTemporaryMessage(`ซื้อ ${thaiNames[type] || type} เรียบร้อย!`);
+
+    const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+}
+
+function openSellPopup() {
+  checkDailySalesReset();
+
+  if (player.dailySalesCount >= maxDailySales) {
+    showMessage("ขายครบ 10 ครั้งแล้วในวันนี้ ลองใหม่พรุ่งนี้!");
+    return;
+  }
+
+  const items = Object.keys(imageUrls).filter(item => player.inventory[item] > 0);
+  if (items.length === 0) {
+    showMessage("ไม่มีผักในคลังสำหรับขาย");
+    return;
+  }
+
+  let currentIndex = 0;
+
+  function renderSellCard(index) {
+    const item = items[index];
+    const qty = player.inventory[item];
+    const baseItem = item.replace("Seed", "").toLowerCase();
+    const price = (seedPrices[baseItem] || 10) + 5;
+
+    return `
+      <div class="sell-card">
+        <div class="sell-img" style="background-image: url('${imageUrls[item]}');"></div>
+        <div class="sell-name">${thaiNames[item] || item}</div>
+        <div class="sell-in">คลังมีอยู่: ${qty} ราคาขาย: ${price}฿</div>
+        <div class="qty-control">
+          <button class="qty-control-down" onclick="changeSellQty(-1)"></button>
+          <span id="sell-qty" class="span-sell">1</span>
+          <button class="qty-control-up" onclick="changeSellQty(1)"></button>
+        </div>
+        <button class="sell-button" onclick="sellCurrentItem()">ยืนยันการขาย</button>
+      </div>
+    `;
+  }
+
+  window.changeSellQty = function (delta) {
+    const qtySpan = document.getElementById("sell-qty");
+    let currentQty = parseInt(qtySpan.textContent);
+    currentQty += delta;
+    const maxQty = Math.min(5, player.inventory[items[currentIndex]]);
+    if (currentQty < 1) currentQty = 1;
+    if (currentQty > maxQty) currentQty = maxQty;
+    qtySpan.textContent = currentQty;
+  };
+
+  window.sellCurrentItem = function () {
+    const item = items[currentIndex];
+    const qty = parseInt(document.getElementById("sell-qty").textContent);
+    const baseItem = item.replace("Seed", "").toLowerCase();
+    const price = (seedPrices[baseItem] || 10) + 5;
+
+    if (qty > player.inventory[item]) {
+      showTemporaryMessage("ผักไม่พอขาย");
+      return;
+    }
+
+    player.inventory[item] -= qty;
+    player.coin += qty * price;
+    player.dailySalesCount++;
+    player.lastSellDate = new Date().toDateString();
+    updateHUD();
+    checkQuests();
+    showTemporaryMessage(`ขาย ${qty} ผล ${thaiNames[item] || item} ได้ ${qty * price}฿`);
+
+      const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+
+    openSellPopup(); // refresh
+  };
+
+  const html = `
+    <h3>ร้านค้าขายผัก</h3>
+    <div class="sell-wrapper">
+      <button class="sell-left" onclick="switchSell(-1)"></button>
+      <div id="sell-card-container">${renderSellCard(currentIndex)}</div>
+      <button class="sell-right" onclick="switchSell(1)"></button>
+    </div>
+    <div class="popup-footer">
+      <button class="back-button" onclick="openShop()">
+        <span>กลับ</span>
+      </button>
+    </div>
+  `;
+
+  window.switchSell = function (dir) {
+    currentIndex = (currentIndex + dir + items.length) % items.length;
+    document.getElementById("sell-card-container").innerHTML = renderSellCard(currentIndex);
+  };
+
+  showPopup(html, 'shop-pop-pop');
+}
+
+function showTemporaryMessage(msg) {
+  const popup = document.getElementById("popup");
+
+  let msgBox = document.createElement('div');
+  msgBox.className = 'temp-message-box';
+  msgBox.innerText = msg;
+
+  msgBox.style.position = 'fixed';
+  msgBox.style.top = '50%';
+  msgBox.style.left = '50%';
+  msgBox.style.transform = 'translate(-50%, -50%)';
+  msgBox.style.background = 'rgba(0, 0, 0, 0.8)';
+  msgBox.style.color = 'white';
+  msgBox.style.padding = window.innerWidth <= 600 ? '8px 16px' : '10px 20px';
+  msgBox.style.borderRadius = '8px';
+  msgBox.style.fontSize = window.innerWidth <= 600 ? '16px' : '20px';
+  msgBox.style.zIndex = '9999';
+  msgBox.style.boxShadow = '0 0 10px rgba(0,0,0,0.5)';
+  msgBox.style.textAlign = 'center';
+
+  document.body.appendChild(msgBox);
+
+  setTimeout(() => {
+    if (msgBox.parentNode) {
+      msgBox.parentNode.removeChild(msgBox);
+    }
+  }, 1500); // แสดง 1.5 วินาที
+}
+
+function openBuyLand(plotIndex) {
+  let msg = `
+<p class="soil-text">ต้องการซื้อที่ดินแปลงนี้ราคา 100 ฿?</p>
+<button class="popup-btn confirm" onclick="confirmBuyLand(${plotIndex})"><span>ยืนยัน</span></button>
+<button class="popup-btn cancel" onclick="closePopup()"><span>ยกเลิก</span></button>
+  `;
+  showPopup(msg, 'question');
+}
+
+function confirmBuyLand(plotIndex) {
+  const levelRequired = plotIndex < 16 ? 10 : 20;
+  if (player.level < levelRequired) {
+    showMessage(`ต้องเลเวล ${levelRequired} ขึ้นไปเพื่อซื้อที่ดินแปลงนี้`);
+    return;
+  }
+  if (player.coin < 100) {
+    showMessage("เงินไม่พอ! ต้องใช้ 100 ฿");
+    return;
+  }
+
+  player.coin -= 100;
+  player.plots[plotIndex].unlockedSlots = 4;
+  updateHUD();
+  renderPlots();
+  checkQuests();
+  closePopup();
+  showMessage("ซื้อที่ดินสำเร็จ! ปลูกผักได้เลย");
+
+    const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+}
+
+
+
+function openQuest() {
+  if (!player || !player.quests) {
+    showMessage("ข้อมูลเควสยังไม่พร้อม");
+    return;
+  }
+
+  let html = `<h3></h3><div class="quest-container">`;
+
+
+  const questsSorted = [...player.quests].sort((a, b) => b.done - a.done);
+
+  questsSorted.forEach(q => {
+    if (q.rewardExp === 0 && q.rewardCoin === 0) return;
+
+    html += `
+      <div class="quest-box">
+        <div class="quest-left">
+          <div><b>${q.title}</b></div>
+          <div class="quest-reward" style="margin-top: 5px;">
+            <img src="https://i.postimg.cc/fLHX3Gj3/level.png" width="20"> ${q.rewardExp} EXP
+            <img src="https://i.postimg.cc/05fXnjZm/coin.png" width="20"> ${q.rewardCoin} ฿
+          </div>
+        </div>
+
+        <div class="quest-action">
+          ${q.done ? 
+            `<button onclick="completeQuest(${q.id})" class="quest-reward-button">รับรางวัล</button>` :
+            `<div class="quest-status">รับรางวัล</div>`
+          }
+        </div>
+      </div>
+    `;
+  });
+
+  html += `</div>`;
+  showPopup(html, 'quest');
+}
+
+function completeQuest(id) {
+  if (!player || !player.quests) return;
+
+  const quest = player.quests.find(q => q.id === id);
+  if (!quest || !quest.done) return;
+
+  // ให้รางวัล
+  gainExp(quest.rewardExp);
+  player.coin += quest.rewardCoin;
+
+  updateHUD();
+  showTemporaryMessage(`รับรางวัล: EXP +${quest.rewardExp} , เหรียญ +${quest.rewardCoin} ฿`, 3000); 
+
+
+  quest.rewardExp = 0;
+  quest.rewardCoin = 0;
+
+
+    const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+
+  renderPlots();
+  checkQuests();
+  closePopup();
+}
+
+const freeCoinQuestions = [
+  {
+    question: "การรับประทานอาหารคอเลสเตอรอลสูง เช่น กุ้ง หอย ปลาหมึก เครื่องในสัตว์ ส่งผลต่อสุขภาพอย่างไร?",
+    choices: ["ไม่มีผลต่อระบบหัวใจ", "เสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจ", "เพิ่มพลังงานในร่างกาย"],
+    correctLetter: "B"
+  },
+  {
+    question: "การสูบบุหรี่มากกว่า 40 มวนต่อวัน ส่งผลต่อสุขภาพอย่างไร?",
+    choices: ["ช่วยลดความเครียดในระยะยาว", "ไม่มีผลต่อร่างกายหากออกกำลังกาย", "เพิ่มความเสี่ยงต่อโรคหัวใจและหลอดเลือด"],
+    correctLetter: "C"
+  },
+  {
+    question: "พฤติกรรมใดช่วยลดความเสี่ยงในการเกิดโรคหลอดเลือดหัวใจ?",
+    choices: ["รับประทานอาหารจานด่วนบ่อย", "ออกกำลังกายอย่างสม่ำเสมอ", "ดื่มแอลกอฮอล์มากขึ้นเพื่อผ่อนคลาย"],
+    correctLetter: "B"
+  },
+  {
+    question: "อาหารประเภทใดที่ควรหลีกเลี่ยงเพื่อลดความเสี่ยงต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["ปลาเนื้อขาวและผักใบเขียว", "โยเกิร์ตไขมันต่ำและนมพร่องมันเนย", "ของทอด ไขมันอิ่มตัวและอาหารแปรรูป"],
+    correctLetter: "C"
+  },
+  {
+    question: "อาหารประเภทใดที่ควรหลีกเลี่ยงเพื่อลดความเสี่ยงต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["กุ้ง หอย ปลาหมึก เครื่องในสัตว์บ่อย ๆ", "ผัก ผลไม้ ธัญพืช", "ไข่ขาว โยเกิร์ตไขมันต่ำ"],
+    correctLetter: "A"
+  },
+  {
+    question: "ข้อใดไม่ใช่ปัจจัยเสี่ยงที่สามารถควบคุมได้ของโรคหลอดเลือดหัวใจ?",
+    choices: ["ประวัติครอบครัวเป็นโรคหัวใจ", "ความดันโลหิตสูง", "การไม่ออกกำลังกาย"],
+    correctLetter: "A"
+  },
+  {
+    question: "ข้อใดจัดเป็นพฤติกรรมเสี่ยงโดยตรงของโรคหลอดเลือดหัวใจ?",
+    choices: ["อายุมากกว่า 60 ปี", "การรับประทานอาหารไขมันอิ่มตัวสูง", "ประวัติครอบครัวเป็นความดันโลหิตสูง"],
+    correctLetter: "B"
+  },
+  {
+    question: "การปฏิบัติตัวเกี่ยวกับการรักษาโรคประจำตัวข้อใดไม่ถูกต้อง?",
+    choices: ["รับประทานยาประจำตัวเป็นประจำ", "มาตรวจตามนัดแพทย์อย่างสม่ำเสมอ", "รับประทานอาหารที่ไม่มีประโยชน์"],
+    correctLetter: "C"
+  },
+  {
+    question: "การจัดการความเครียดข้อใดไม่เหมาะสม ส่งผลให้เกิดความเสี่ยงต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["ทำงานอดิเรก", "สูบบุหรี่", "ไปเที่ยวสถานที่ต่าง ๆ"],
+    correctLetter: "B"
+  },
+  {
+    question: "ความเครียดสามารถกระตุ้นให้เกิดพฤติกรรมใดที่เพิ่มความเสี่ยงต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["การนอนหลับพักผ่อนอย่างเพียงพอ", "การออกกำลังกายอย่างสม่ำเสมอ", "การสูบบุหรี่และดื่มแอลกอฮอล์"],
+    correctLetter: "C"
+  },
+  {
+    question: "โรคในข้อใดไม่เสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจ?",
+    choices: ["โรคหอบหืด", "โรคเบาหวาน", "โรคความดันโลหิตสูง"],
+    correctLetter: "A"
+  },
+  {
+    question: "ข้อใดต่อไปนี้เป็นอาการที่พบบ่อยของโรคหลอดเลือดหัวใจ?",
+    choices: ["ปวดศีรษะ", "เจ็บแน่นหน้าอก เหนื่อยง่าย", "คันตามผิวหนัง"],
+    correctLetter: "B"
+  },
+  {
+    question: "การออกกำลังกายแบบใดที่เหมาะสมต่อการส่งเสริมสุขภาพหัวใจ?",
+    choices: ["เดินเร็วหรือปั่นจักรยาน วันละ 30 นาที สัปดาห์ละ 5 วัน", "ออกกำลังกายหนักทุกวันโดยไม่มีวันพัก", "ออกกำลังกายเดือนละครั้ง"],
+    correctLetter: "A"
+  },
+  {
+    question: "โรคหลอดเลือดหัวใจสามารถทำให้เกิดภาวะแทรกซ้อนใดได้บ่อยที่สุด?",
+    choices: ["โรคเบาหวาน", "ภาวะโลหิตจาง", "กล้ามเนื้อหัวใจตายเฉียบพลัน"],
+    correctLetter: "C"
+  },
+  {
+    question: "ข้อใดคือผลกระทบของการสูบบุหรี่ต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["ทำให้หลอดเลือดตีบและเพิ่มความเสี่ยงต่อโรคหัวใจ", "เพิ่มการไหลเวียนของออกซิเจน", "ช่วยให้หลอดเลือดขยายตัว"],
+    correctLetter: "A"
+  },
+  {
+    question: "ควบคุมความเครียดมีผลอย่างไรต่อโรคหลอดเลือดหัวใจ?",
+    choices: ["ช่วยลดความเสี่ยงของโรคหลอดเลือดหัวใจ", "ไม่มีผลต่อโรคหลอดเลือดหัวใจ?", "ทำให้ความดันโลหิตสูง"],
+    correctLetter: "A"
+  }
+];
+
+let currentFreeQuestion = null;
+
+function openFreeCoin() {
+  checkFreeCoinReset();
+
+  if (player.freeCoinCount >= maxFreeCoinPerDay) {
+    showMessage("วันนี้รับเหรียญฟรีครบแล้ว!");
+    return;
+  }
+
+  // สร้าง array ถ้ายังไม่มี
+  if (!player.answeredFreeCoins) {
+    player.answeredFreeCoins = [];
+  }
+
+  // สุ่มจากคำถามที่ยังไม่เคยตอบถูก
+  const unanswered = freeCoinQuestions
+    .map((q, index) => ({ q, index }))
+    .filter(({ index }) => !player.answeredFreeCoins.includes(index));
+
+  if (unanswered.length === 0) {
+    showMessage("คุณตอบคำถามเหรียญฟรีครบหมดแล้ว!");
+    return;
+  }
+
+  const { q, index } = unanswered[Math.floor(Math.random() * unanswered.length)];
+  currentFreeQuestion = { ...q, index }; // เก็บ index ด้วย
+
+  const choiceLetters = ['A', 'B', 'C'];
+  let choicesText = q.choices.map((choice, i) => `${choiceLetters[i]}. ${choice}`).join('<br>');
+
+  showPopup(`
+    <p class="free-q">ตอบคำถามเพื่อรับเหรียญฟรี</p>
+    <p class="free-qq">${q.question}</p>
+    <p class="free-choices">${choicesText}</p>
+    <input id="freeCoinAnswer" type="text" maxlength="1" placeholder="พิมพ์อักษรคำตอบที่ถูกต้อง" class="free-input">
+    <br>
+    <button onclick="submitFreeCoinAnswer()" class="free-btn">
+      <span>ตอบคำถาม</span>
+    </button>
+  `, 'free');
+}
+
+function submitFreeCoinAnswer() {
+  const input = document.getElementById('freeCoinAnswer');
+  const answer = input.value.trim().toUpperCase();
+
+  if (!['A', 'B', 'C'].includes(answer)) {
+    showMessage("กรุณากรอก A, B หรือ C เท่านั้น");
+    return;
+  }
+
+  closePopup();
+
+  const isCorrect = answer === currentFreeQuestion.correctLetter;
+  const index = currentFreeQuestion.index;
+
+  if (isCorrect) {
+    // เพิ่ม index ที่ตอบถูกไว้ใน player.answeredFreeCoins
+    if (!player.answeredFreeCoins.includes(index)) {
+      player.answeredFreeCoins.push(index);
+    }
+
+    player.coin += 20;
+    player.freeCoinCount++;
+    player.totalFreeCoin++;
+    updateHUD();
+    checkQuests();
+    showMessage("รับเหรียญฟรี 20 บาทแล้ว!");
+
+     const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+  } else {
+    showMessage("ตอบผิดจ้า ลองใหม่นะ");
+  }
+}
+
+function checkQuests() {
+  if (!player || !player.quests) return;
+
+  const plantedCount = player.plots.reduce((sum, plot) => sum + plot.planted.filter(p => p).length, 0);
+  const plantedTypes = new Set();
+  const unlockedPlots = player.plots.filter(p => p.unlockedSlots > 0).length;
+  const unlockedSlotsInPlot1 = player.plots[0]?.unlockedSlots || 0;
+  const totalInventoryCount = Object.keys(player.inventory || {}).filter(k => !k.includes('Seed')).reduce((sum, key) => sum + player.inventory[key], 0);
+  const answeredFree = player.answeredFreeCoins?.length || 0;
+  const level = player.level || 1;
+  const catFedCount = player.catFedCount || 0;
+  const totalHerbalFood = Object.values(player.herbalInventory || {}).reduce((sum, qty) => sum + qty, 0);
+  const hasCookedOnce = totalHerbalFood > 0;
+
+  // เก็บชนิดผักที่ปลูกไว้แล้ว
+  player.plots.forEach(plot => {
+    plot.planted.forEach((val, idx) => {
+      if (val && typeof val === 'string') plantedTypes.add(val);
+    });
+  });
+
+  player.quests.forEach(q => {
+    if (q.done) return;
+
+    switch (q.id) {
+      case 1:
+        if (player.inventory.rice >= 4 || plantedTypes.has('rice')) q.done = true;
+        break;
+      case 2:
+        if (player.dailySalesCount >= 1) q.done = true;
+        break;
+      case 3:
+        if (plantedTypes.size >= 3) q.done = true;
+        break;
+      case 4:
+        if (plantedCount >= 5) q.done = true;
+        break;
+      case 5:
+        if (player.freeCoinCount >= 1) q.done = true;
+        break;
+      case 6:
+        if (unlockedSlotsInPlot1 >= 4) q.done = true;
+        break;
+      case 7:
+        if (unlockedPlots >= 2) q.done = true;
+        break;
+      case 8:
+        if (plantedTypes.size >= 5) q.done = true;
+        break;
+      case 9:
+        if (player.dailySalesCount >= 10) q.done = true;
+        break;
+      case 10:
+        if (player.freeCoinCount >= 3) q.done = true;
+        break;
+      case 11:
+        if (player.coin >= 200) q.done = true;
+        break;
+      case 12:
+        if (totalInventoryCount >= 20) q.done = true;
+        break;
+      case 13:
+        if (plantedTypes.size >= 8) q.done = true;
+        break;
+      case 14:
+        if (unlockedPlots >= 3) q.done = true;
+        break;
+      case 15:
+        if (level >= 3) q.done = true;
+        break;
+      case 16:
+        if (player.dailySalesCount >= 20) q.done = true;
+        break;
+      case 17:
+        if (player.totalFreeCoin >= 6) q.done = true;
+        break;
+      case 18:
+        if (totalInventoryCount >= 50) q.done = true;
+        break;
+      case 19:
+        if (catFedCount >= 1) q.done = true;
+        break;
+      case 20:
+        if (catFedCount >= 5) q.done = true;
+        break;
+      case 21:
+        if (hasCookedOnce) q.done = true;
+        break;
+      case 22:
+        if (totalHerbalFood >= 10) q.done = true;
+        break;  
+    }
+  });
+}
+
+function showPopup(html, type) {
+  const popup = document.getElementById("popup");
+  const content = document.getElementById("popup-content");
+  const overlay = document.getElementById("popup-overlay");
+
+  // ✅ ซ่อน title เดิมที่อาจยังค้างอยู่
+  const plantTitle = document.getElementById("plant-title");
+  const inventoryTitle = document.getElementById("inventory-title");
+  const questTitle = document.getElementById("quest-title");
+  const herbalKitchenTitle = document.getElementById("herbal-kitchen-title");
+  if (plantTitle) plantTitle.style.display = "none";
+  if (inventoryTitle) inventoryTitle.style.display = "none";
+  if (questTitle) questTitle.style.display = "none";
+  if (herbalKitchenTitle) herbalKitchenTitle.style.display = "none";
+
+  content.innerHTML = html;
+  overlay.style.display = "block";
+  popup.style.display = "flex";
+
+  // ✅ ล้าง class เดิมก่อนใส่ใหม่
+  popup.classList.remove('inventory', 'shop', 'quest', 'question', 'free', 'message-popup', 'shop-pop', 'shop-pop-pop', 'plant', 'settings', 'neighbor-cat', 'herbal-kitchen');
+
+
+  if (type === 'inventory') popup.classList.add('inventory');
+  else if (type === 'shop') popup.classList.add('shop');
+  else if (type === 'quest') popup.classList.add('quest');
+  else if (type === 'free') popup.classList.add('free');
+  else if (type === 'message-popup') popup.classList.add('message-popup');
+  else if (type === 'shop-pop') popup.classList.add('shop-pop');
+  else if (type === 'shop-pop-pop') popup.classList.add('shop-pop-pop');
+  else if (type === 'plant') popup.classList.add('plant');
+  else if (type === 'question') popup.classList.add('question');
+  else if (type === 'settings') popup.classList.add('settings');
+  else if (type === 'neighbor-cat') popup.classList.add('neighbor-cat');
+  else if (type === 'herbal-kitchen') popup.classList.add('herbal-kitchen');
+
+if (type === 'inventory' && inventoryTitle) {
+  inventoryTitle.style.display = 'block';
+} else if (type === 'herbal-kitchen' && herbalKitchenTitle) {
+  herbalKitchenTitle.style.display = 'block';
+} else if (type === 'plant' && plantTitle) {
+  plantTitle.style.display = 'block';
+} else if (type === 'quest' && questTitle) {
+  questTitle.style.display = 'block';
+}
+
+  const closeBtn = popup.querySelector('.close-button img');
+  if (closeBtn) {
+    closeBtn.src = (type === 'free') 
+      ? "https://i.postimg.cc/Y06VTQVr/close-free.png" 
+      : "https://i.postimg.cc/T2spPgp7/close.png";
+  }
+
+  // ✅ แสดง/ซ่อนปุ่มปิด
+  const closeBtnDiv = popup.querySelector('.close-button');
+  if (closeBtnDiv) {
+    closeBtnDiv.style.display = (type === 'message-popup') ? 'none' : 'block';
+  }
+}
+
+function closePopup() {
+  const popup = document.getElementById("popup");
+  popup.style.display = "none";
+  popup.classList.remove('inventory', 'shop', 'quest', 'question', 'free', 'message-popup', 'shop-pop', 'shop-pop-pop', 'plant', 'settings', 'neighbor-cat', 'herbal-kitchen');
+
+  const plantTitle = document.getElementById("plant-title");
+  const inventoryTitle = document.getElementById("inventory-title");
+  const questTitle = document.getElementById("quest-title");
+  const herbalKitchenTitle = document.getElementById("herbal-kitchen-title");
+
+  if (plantTitle) plantTitle.style.display = "none";
+  if (inventoryTitle) inventoryTitle.style.display = "none";
+  if (questTitle) questTitle.style.display = "none";
+  if (herbalKitchenTitle) herbalKitchenTitle.style.display = "none";
+
+  const closeBtn = popup.querySelector('.close-button');
+  if (closeBtn) closeBtn.style.display = 'block';
+
+  const content = document.getElementById("popup-content");
+if (content) content.innerHTML = "";
+
+document.getElementById("popup-overlay").style.display = "none";
+}
+
+      let currentPage = 0;
+
+      function goLeft() {
+        const scrollArea = document.getElementById("scroll-area");
+        const totalFarms = document.querySelectorAll('.farm-background').length;
+        const farmWidth = document.querySelector('.farm-background')?.offsetWidth || 1080;
+
+        if (currentPage > 0) {
+          currentPage--;
+          scrollArea.scrollTo({ left: currentPage * farmWidth, behavior: "smooth" });
+        }
+      }
+
+      function goRight() {
+        const scrollArea = document.getElementById("scroll-area");
+        const totalFarms = document.querySelectorAll('.farm-background').length;
+        const farmWidth = document.querySelector('.farm-background')?.offsetWidth || 1080;
+
+        if (currentPage < totalFarms - 1) {
+          currentPage++;
+          scrollArea.scrollTo({ left: currentPage * farmWidth, behavior: "smooth" });
+        }
+      }
+      
+function showMessage(msg) {
+  const popup = document.getElementById("popup");
+  const content = document.getElementById("popup-content");
+
+  content.innerHTML = `
+    <div class="message-box">
+      <p>${msg}</p>
+      <button onclick="closePopup()">ตกลง</button>
+    </div>
+  `;
+
+  popup.style.display = "flex";
+  popup.classList.add('message-popup');
+
+  const closeBtn = popup.querySelector('.close-button');
+  if (closeBtn) closeBtn.style.display = 'none';
+
+  updateGameData();
+}
+
+const GAS_URL = "https://script.google.com/macros/s/AKfycbw1Zo0ElNHWwlqWs2mjYATqem_rUkDuGtYEc5WIJCOtvQxM_ROYVCl_ESR2Z-b18uUK/exec"; // แก้เป็น URL จริง
+
+// โหลดข้อมูลผู้เล่นจาก backend ด้วย fetch
+function fetchPlayerData(name) {
+  console.log("เรียกชื่อผู้เล่น:", name);
+  return fetch(GAS_URL + '?action=getOrCreatePlayer&name=' + encodeURIComponent(name))
+    .then(response => {
+      if (!response.ok) throw new Error('โหลดข้อมูลล้มเหลว');
+      return response.json();
+    })
+    .then(data => {
+      window.player = data;
+      init(data); // เรียกฟังก์ชัน init() เมื่อได้ข้อมูลแล้ว
+    })
+    .catch(err => {
+      console.error("โหลดข้อมูลล้มเหลว:", err);
+      throw err;
+    });
+}
+
+// บันทึกข้อมูลผู้เล่นด้วย fetch POST
+function savePlayerData(name, playerData) {
+  return fetch(GAS_URL, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      action: 'savePlayer',
+      name: name,
+      player: playerData
+    }),
+  })
+  .then(response => {
+    if (!response.ok) throw new Error('บันทึกข้อมูลล้มเหลว');
+    return response.json();
+  })
+  .catch(err => {
+    console.error("บันทึกข้อมูลล้มเหลว:", err);
+  });
+}
+
+// แก้ updateGameData() ให้เรียก savePlayerData แทน
+function updateGameData() {
+  const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+}
+
+// แก้ window.onbeforeunload ให้เรียก savePlayerData
+window.onbeforeunload = () => {
+  const playerName = localStorage.getItem("playerName");
+  if (playerName && window.player) {
+    savePlayerData(playerName, window.player);
+  }
+};
+  </body>
+</html>
