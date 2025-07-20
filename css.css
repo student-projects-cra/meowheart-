@@ -1,0 +1,279 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+  font-family: 'Prompt', sans-serif;
+  overflow-y: auto;
+  background: linear-gradient(to bottom right, #d0eaff, #e6f2ff, #f2f9ff) !important;
+}
+
+.custom-card {
+  background: #fff;
+  border: 2px solid #89cff0;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.custom-card-header {
+  text-align: center;
+  font-weight: normal;
+  font-size: 20px;
+  padding: 10px 15px;
+  background-color: #89cff0;
+  border-bottom: 1px solid #89cff0;
+  color: #fff;
+}
+
+.custom-card-body {
+  padding: 20px 15px;
+}
+
+.question-label {
+  display: block;
+  font-size: 16px;
+  margin-bottom: 10px;
+  text-align: left;
+}
+
+.question-block {
+  margin-bottom: 20px;
+}
+
+.custom-radio {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+/* สไตล์ radio แบบกำหนดเอง */
+#form-id input[type="radio"] {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  position: relative;
+  cursor: pointer;
+  vertical-align: middle;
+  background-color: #fff;
+  margin-left: 3px;
+  margin-right: 8px;
+  transition: border-color 0.2s ease;
+  vertical-align: middle;
+  margin-top: -2px;
+}
+
+#form-id input[type="radio"]:checked {
+  border-color: #89cff0;
+  background-color: #fff;
+}
+
+#form-id input[type="radio"]:checked::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background: #89cff0;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+#form-id input[type="radio"]:hover {
+  border-color: #4fa3d1;
+}
+
+/* ปรับขนาดสำหรับมือถือ */
+@media (max-width: 350px) {
+  #form-id input[type="radio"] {
+    width: 14px;
+    height: 14px;
+    margin-right: 6px;
+    margin-top: -1px;
+  }
+  
+  #form-id input[type="radio"]:checked::before {
+    width: 6px;
+    height: 6px;
+    top: 4px;
+    left: 4px;
+  }
+}
+
+#form-id {
+  background: transparent !important;
+  width: 100%;
+  max-width: 600px;
+  margin: 50px auto 30px auto;
+  text-align: center;
+  position: relative;
+  padding: 0 15px;
+}
+
+/* ขนาดสำหรับมือถือ */
+@media (max-width: 500px) {
+  #form-id {
+    max-width: 100%;
+  }
+}
+
+/* ขนาดสำหรับ iPad แนวตั้ง */
+@media (min-width: 481px) and (max-width: 768px) {
+  #form-id {
+    max-width: 500px;
+  }
+}
+
+#form-id fieldset {
+  border: none;
+  border-radius: 3px;
+  box-shadow: none;
+  box-sizing: border-box;
+  padding-bottom: 30px;
+  width: 100%;
+  margin: 0;
+  position: relative;
+}
+
+#form-id fieldset:not(:first-of-type) {
+  display: none;
+}
+
+#form-id .custom-button-next {
+  width: 100px;
+  background: #89cff0;
+  font-weight: normal;
+  color: #000000;
+  border: 0;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+#form-id .custom-button-next:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #89cff0;
+}
+
+#form-id .custom-button {
+  width: 100px;
+  background: #89cff0;
+  font-weight: normal;
+  color: #000000;
+  border: 0;
+  cursor: pointer;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 0px 5px 15px 5px;
+}
+
+#form-id .custom-button:hover {
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #89cff0;
+}
+
+.my-confirm-btn {
+  background-color: #89cff0 !important;
+  color: black !important;
+  font-weight: bold;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 20px;
+  font-size: 16px;
+}
+
+.my-confirm-btn:hover {
+  background-color: #89cff0 !important;
+  box-shadow: 0 0 0 2px #fff, 0 0 0 4px #89cff0;
+}
+
+.my-confirm-btn:focus,
+.my-confirm-btn:active {
+  background-color: #89cff0 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.title {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #2C3E50;
+  text-transform: uppercase;
+}
+
+.sub-title {
+  font-size: 14px;
+  margin-bottom: 20px;
+  font-weight: normal;
+  color: #666;
+  text-align: left;
+}
+
+/* Custom Progressbar */
+.custom-progress {
+  margin-bottom: 30px;
+  overflow: hidden;
+  counter-reset: step;
+  padding-left: 0;
+}
+
+.custom-progress li {
+  list-style-type: none;
+  color: black;
+  text-transform: uppercase;
+  font-size: 13px;
+  width: 50%;
+  float: left;
+  position: relative;
+}
+
+.custom-progress li:before {
+  content: counter(step);
+  counter-increment: step;
+  width: 30px;
+  height: 30px;
+  display: flex; /* ✅ ใช้ Flexbox */
+  align-items: center; /* ✅ จัดกลางแนวตั้ง */
+  justify-content: center; /* ✅ จัดกลางแนวนอน */
+  font-size: 16px;
+  color: #333;
+  background: white;
+  border-radius: 50%;
+  margin: 0 auto 5px auto;
+  text-align: center;
+  border: 2px solid #89cff0;
+  position: relative;
+  z-index: 2;
+}
+
+.custom-progress li:after {
+  content: '';
+  width: 100%;
+  height: 2px;
+  background: #fff;
+  position: absolute;
+  left: -50%;
+  top: 15px;
+  z-index: 1;
+}
+
+.custom-progress li:first-child:after {
+  content: none;
+}
+
+.custom-progress li.active:before,
+.custom-progress li.active:after {
+  background: #89cff0;
+  color: white;
+}
+</style>
