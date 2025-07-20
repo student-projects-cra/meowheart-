@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <base target="_top">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+    integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <link rel="stylesheet" href="css.css">
+
+</head>
+
+<body>
+  <body translate="no">
+    <form name="myForm">
+      <div id="form-id">
+        <!--Progressbar-->
+        <ul class='custom-progress'>
+          <li class="active">แบบสอบถามพฤติกรรมการป้องกันโรค</li>
+          <li>แบบประเมินความรู้ด้านสุขภาพ</li>
+        </ul>
+
+        <!--Account Setup-->
+<fieldset>
+        <div class="custom-card">
+          <div class="custom-card-header">แบบสอบถามพฤติกรรมการป้องกันโรคหลอดเลือดหัวใจ</div>
+          <div class="custom-card-body">
+            <h3 class='sub-title'>
+              คำแนะนำ: ท่านมีพฤติกรรมหรือการปฏิบัติเกี่ยวกับข้อความนี้อย่างไร กรุณาตอบแบบสอบถาม โดยเลือกคำตอบตามลำดับความสำคัญที่ตรงกับพฤติกรรมของท่าน<br>
+              ปฏิบัติเป็นประจำ (5)<br>
+              ปฎิบัติบ่อยครั้ง (4)<br>
+              ปฏิบัติบ้างบางครั้ง (3)<br>
+              ปฏิบัตินาน ๆ ครั้ง (2)<br>
+              ไม่ได้ปฏิบัติ (1)
+            </h3>
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านสูบบุหรี่มากกว่า 40 มวน/วัน</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav1" id="always1" value="1" required>
+              <label class="form-check-label" for="always1">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav1" id="often1" value="2">
+              <label class="form-check-label" for="often1">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav1" id="sometime1" value="3">
+              <label class="form-check-label" for="sometime1">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav1" id="rarely1" value="4">
+              <label class="form-check-label" for="rarely1">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav1" id="never1" value="5">
+              <label class="form-check-label" for="never1">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านดื่มแอลกอฮอล์ ไม่เกิน 20 กรัม/วัน ในผู้ชาย (2 ดื่มมาตรฐาน) และไม่เกิน 10 กรัม/วัน ในผู้หญิง (1 ดื่มมาตรฐาน)</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav2" id="always2" value="5" required>
+              <label class="form-check-label" for="always2">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav2" id="often2" value="4">
+              <label class="form-check-label" for="often2">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav2" id="sometime2" value="3">
+              <label class="form-check-label" for="sometime2">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav2" id="rarely2" value="2">
+              <label class="form-check-label" for="rarely2">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav2" id="never2" value="1">
+              <label class="form-check-label" for="never2">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านดื่มชาและกาแฟมากกว่า 6 แก้ว/วัน</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav3" id="always3" value="1" required>
+              <label class="form-check-label" for="always3">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav3" id="often3" value="2">
+              <label class="form-check-label" for="often3">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav3" id="sometime3" value="3">
+              <label class="form-check-label" for="sometime3">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav3" id="rarely3" value="4">
+              <label class="form-check-label" for="rarely3">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav3" id="never3" value="5">
+              <label class="form-check-label" for="never3">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านรับประทานอาหารที่มีคอเลสเตอรอลสูง เช่น กุ้ง หอย ปลาหมึก เครื่องในสัตว์ เป็นต้น</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav4" id="always4" value="1" required>
+              <label class="form-check-label" for="always4">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav4" id="often4" value="2">
+              <label class="form-check-label" for="often4">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav4" id="sometime4" value="3">
+              <label class="form-check-label" for="sometime4">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav4" id="rarely4" value="4">
+              <label class="form-check-label" for="rarely4">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav4" id="never4" value="5">
+              <label class="form-check-label" for="never4">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านรับประทานอาหารที่มีไขมันต่ำ ได้แก่ ธัญพืช ไข่ข่าว ปลาเนื้อขาว นมพร่องมันเนย โยเกิร์ตไขมันต่ำ เป็นต้น</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav5" id="always5" value="5" required>
+              <label class="form-check-label" for="always5">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav5" id="often5" value="4">
+              <label class="form-check-label" for="often5">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav5" id="sometime5" value="3">
+              <label class="form-check-label" for="sometime5">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav5" id="rarely5" value="2">
+              <label class="form-check-label" for="rarely5">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav5" id="never5" value="1">
+              <label class="form-check-label" for="never5">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านออกกำลังกายในระดับปานกลาง 150นาที/สัปดาห์ (แบ่งเป็นวันละ 30 นาที 5 วัน/สัปดาห์) เช่น เดินเร็ว ปั่นจักรยาน เป็นต้น</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav6" id="always6" value="5" required>
+              <label class="form-check-label" for="always6">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav6" id="often6" value="4">
+              <label class="form-check-label" for="often6">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav6" id="sometime6" value="3">
+              <label class="form-check-label" for="sometime6">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav6" id="rarely6" value="2">
+              <label class="form-check-label" for="rarely6">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav6" id="never6" value="1">
+              <label class="form-check-label" for="never6">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านออกกำลังกายในระดับหนัก 75 นาที/สัปดาห์ (อย่างน้อย 10 นาที/ครั้ง 4-5 วัน/สัปดาห์) เช่น วิ่งเร็ว ว่ายน้ำ เดินขึ้นลงบันได เป็นต้น</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav7" id="always7" value="5" required>
+              <label class="form-check-label" for="always7">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav7" id="often7" value="4">
+              <label class="form-check-label" for="often7">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav7" id="sometime7" value="3">
+              <label class="form-check-label" for="sometime7">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav7" id="rarely7" value="2">
+              <label class="form-check-label" for="rarely7">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav7" id="never7" value="1">
+              <label class="form-check-label" for="never7">(1)</label>
+            </div>
+           </div>
+
+           <div class="question-block">
+            <label class="question-label mb-3">ท่านสามารถยอมรับและจัดการปัญหาและปล่อยวางปัญหาที่เกิดจากความเครียดได้</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav8" id="always8" value="5" required>
+              <label class="form-check-label" for="always8">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav8" id="often8" value="4">
+              <label class="form-check-label" for="often8">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav8" id="sometime8" value="3">
+              <label class="form-check-label" for="sometime8">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav8" id="rarely8" value="2">
+              <label class="form-check-label" for="rarely8">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav8" id="never8" value="1">
+              <label class="form-check-label" for="never8">(1)</label>
+            </div>
+           </div>
+
+            <label class="question-label mb-3">ท่านรับประทานยาประจำตัวและเข้ารับตรวจตามนัดอย่างสม่ำเสมอ (กรณีไม่มีโรคประจำตัวให้เลือกตอบข้อ ปฏิบัติเป็นประจำ)</label>
+
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav9" id="always9" value="5" required>
+              <label class="form-check-label" for="always9">(5)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav9" id="often9" value="4">
+              <label class="form-check-label" for="often9">(4)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav9" id="sometime9" value="3">
+              <label class="form-check-label" for="sometime9">(3)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav9" id="rarely9" value="2">
+              <label class="form-check-label" for="rarely9">(2)</label>
+            </div>
+            <div class="custom-radio">
+              <input class="form-check-input" type="radio" name="behav9" id="never9" value="1">
+              <label class="form-check-label" for="never9">(1)</label>
+            </div>
+          </div>
+
+          <!-- ปุ่มถัดไป -->
+          <div class="form-group text-center">
+            <input type='button' name='ถัดไป' class='next-button custom-button-next' value="ถัดไป">
+          </div>
+        </div>
+      </fieldset>
+
+      <!-- แบบประเมินความรู้ -->
+      <fieldset>
+        <div class="custom-card">
+          <div class="custom-card-header">แบบประเมินความรู้ด้านสุขภาพเกี่ยวกับโรคหลอดเลือดหัวใจ</div>
+          <div class="custom-card-body">
+            <h3 class='sub-title'>
+              ส่วนที่ 1 กรุณาเลือก "ใช่" หรือ "ไม่ใช่" ตามความเข้าใจของท่านในแต่ละข้อ
+            </h3>
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่เป็นโรคเบาหวาน เสี่ยงต่อการเป็นโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q1" id="yes1" value="1" required>
+                <label class="form-check-label" for="yes1">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q1" id="no1" value="0">
+                <label class="form-check-label" for="no1">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q1" id="not-sure1" value="0">
+                <label class="form-check-label" for="not-sure1">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่เป็นโรคไขมันในเลือดสูงเสี่ยงต่อการเป็นโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q2" id="yes2" value="1" required>
+                <label class="form-check-label" for="yes2">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q2" id="no2" value="0">
+                <label class="form-check-label" for="no2">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q2" id="not-sure2" value="0">
+                <label class="form-check-label" for="not-sure2">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่เป็นโรคความดันโลหิตสูงเสี่ยงต่อการเป็นโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q3" id="yes3" value="1" required>
+                <label class="form-check-label" for="yes3">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q3" id="no3" value="0">
+                <label class="form-check-label" for="no3">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q3" id="not-sure3" value="0">
+                <label class="form-check-label" for="not-sure3">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...การดื่มเครื่องดื่มที่มีแอลกอฮอล์เป็นประจำ ช่วยป้องกันการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q4" id="yes4" value="0" required>
+                <label class="form-check-label" for="yes4">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q4" id="no4" value="1">
+                <label class="form-check-label" for="no4">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q4" id="not-sure4" value="0">
+                <label class="form-check-label" for="not-sure4">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...การหลีกเลี่ยงการรับประทานอาหารทอด รสเค็ม อาหารที่ใส่ผงชูรส ช่วยลดความเสี่ยงในการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q5" id="yes5" value="1" required>
+                <label class="form-check-label" for="yes5">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q5" id="no5" value="0">
+                <label class="form-check-label" for="no5">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q5" id="not-sure5" value="0">
+                <label class="form-check-label" for="not-sure5">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...การออกกำลังกายอย่างน้อย 2 ชั่วโมง 30 นาทีต่อสัปดาห์อย่างต่อเนื่องและสม่ำเสมอ ไม่สามารถป้องกันการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q6" id="yes6" value="0" required>
+                <label class="form-check-label" for="yes6">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q6" id="no6" value="1">
+                <label class="form-check-label" for="no6">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q6" id="not-sure6" value="0">
+                <label class="form-check-label" for="not-sure6">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...การเดินเร็วหรือการเต้นแอโรบิคอย่างน้อย 2 ชั่วโมง 30 นาทีต่อสัปดาห์ สามารถป้องกันการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q7" id="yes7" value="1" required>
+                <label class="form-check-label" for="yes7">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q7" id="no7" value="0">
+                <label class="form-check-label" for="no7">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q7" id="not-sure7" value="0">
+                <label class="form-check-label" for="not-sure7">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่มีความเครียดเป็นประจำ เสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q8" id="yes8" value="1" required>
+                <label class="form-check-label" for="yes8">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q8" id="no8" value="0">
+                <label class="form-check-label" for="no8">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q8" id="not-sure8" value="0">
+                <label class="form-check-label" for="not-sure8">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่สูบบุหรี่อย่างน้อย 5 มวนต่อวันเป็นประจำ เสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q9" id="yes9" value="1" required>
+                <label class="form-check-label" for="yes9">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q9" id="no9" value="0">
+                <label class="form-check-label" for="no9">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q9" id="not-sure9" value="0">
+                <label class="form-check-label" for="not-sure9">ไม่ทราบ</label>
+              </div>
+            </div>
+
+              <label class="question-label mb-3">ท่านคิดว่า...ผู้ที่มีภาวะอ้วนและอ้วนลงพุง เสี่ยงต่อการเกิดโรคหลอดเลือดหัวใจได้มากกว่าคนปกติ</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q10" id="yes10" value="1" required>
+                <label class="form-check-label" for="yes10">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q10" id="no10" value="0">
+                <label class="form-check-label" for="no10">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q10" id="not-sure10" value="0">
+                <label class="form-check-label" for="not-sure10">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <input type='button' name='ย้อนกลับ' class='prev-button custom-button' value="ย้อนกลับ"> 
+            <input type='button' name='ถัดไป' class='next-button custom-button' value="ถัดไป">
+          </div>
+      </fieldset>
+
+<fieldset>
+        <div class="custom-card">
+          <div class="custom-card-header">แบบประเมินความรู้ด้านสุขภาพเกี่ยวกับโรคหลอดเลือดหัวใจ</div>
+          <div class="custom-card-body">
+            <h3 class='sub-title'>
+              ส่วนที่ 2 ท่านคิดว่าอาการต่อไปนี้เป็น “อาการหรือสัญญาณเตือนโรคหลอดเลือดหัวใจ” ใช่หรือไม่ใช่
+            </h3>
+            <div class="question-block">
+              <label class="question-label mb-3">อาการเจ็บหน้าทรวงอก</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q11" id="yes11" value="1" required>
+                <label class="form-check-label" for="yes11">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q11" id="no11" value="0">
+                <label class="form-check-label" for="no11">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q11" id="not-sure11" value="0">
+                <label class="form-check-label" for="not-sure11">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">อาการร้าวที่แขนซ้ายด้านในขึ้นไปที่กราม</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q12" id="yes12" value="1" required>
+                <label class="form-check-label" for="yes12">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q12" id="no12" value="0">
+                <label class="form-check-label" for="no12">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q12" id="not-sure12" value="0">
+                <label class="form-check-label" for="not-sure12">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">อาการหายใจหอบเหนื่อย นอนราบไม่ได้</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q13" id="yes13" value="1" required>
+                <label class="form-check-label" for="yes13">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q13" id="no13" value="0">
+                <label class="form-check-label" for="no13">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q13" id="not-sure13" value="0">
+                <label class="form-check-label" for="not-sure13">ไม่ทราบ</label>
+              </div>
+            </div>
+
+              <label class="question-label mb-3">อาการหมดสติชั่วคราวหรือหัวใจหยุดเต้นกะทันหัน</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q14" id="yes14" value="1" required>
+                <label class="form-check-label" for="yes14">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q14" id="no14" value="0">
+                <label class="form-check-label" for="no14">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q14" id="not-sure14" value="0">
+                <label class="form-check-label" for="not-sure14">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <input type='button' name='ย้อนกลับ' class='prev-button custom-button' value="ย้อนกลับ"> 
+            <input type='button' name='ถัดไป' class='next-button custom-button' value="ถัดไป">
+          </div>
+      </fieldset>
+
+<fieldset>
+        <div class="custom-card">
+          <div class="custom-card-header">แบบประเมินความรู้ด้านสุขภาพเกี่ยวกับโรคหลอดเลือดหัวใจ</div>
+          <div class="custom-card-body">
+            <h3 class='sub-title'>
+              ส่วนที่ 3 ท่านคิดว่าผลกระทบต่อไปนี้เป็น “ผลกระทบต่อโรคหลอดเลือดหัวใจ” ใช่หรือไม่ใช่
+            </h3>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ผู้ที่เป็นโรคหลอดเลือดหัวใจ เสี่ยงต่อการเกิดภาวะหัวใจล้มเหลว</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q15" id="yes15" value="1" required>
+                <label class="form-check-label" for="yes15">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q15" id="no15" value="0">
+                <label class="form-check-label" for="no15">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q15" id="not-sure15" value="0">
+                <label class="form-check-label" for="not-sure15">ไม่ทราบ</label>
+              </div>
+            </div>
+
+            <div class="question-block">
+              <label class="question-label mb-3">ผู้ที่ไม่สามารถปรับตัวเกี่ยวกับโรคหลอดเลือดหัวใจ ส่งผลต่อการเกิดภาวะซึมเศร้า</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q16" id="yes16" value="1" required>
+                <label class="form-check-label" for="yes16">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q16" id="no16" value="0">
+                <label class="form-check-label" for="no16">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q16" id="not-sure16" value="0">
+                <label class="form-check-label" for="not-sure16">ไม่ทราบ</label>
+              </div>
+            </div>
+
+              <label class="question-label mb-3">ผู้ที่เป็นโรคหลอดเลือดหัวใจ ส่งผลกระทบต่อบทบาทหน้าที่ทั้งในครอบครัว ที่ทำงานและสังคม</label>
+
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q17" id="yes17" value="1" required>
+                <label class="form-check-label" for="yes17">ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q17" id="no17" value="0">
+                <label class="form-check-label" for="no17">ไม่ใช่</label>
+              </div>
+              <div class="custom-radio">
+                <input class="form-check-input" type="radio" name="q17" id="not-sure17" value="0">
+                <label class="form-check-label" for="not-sure17">ไม่ทราบ</label>
+              </div>
+            </div>
+
+<input type='button' name='ย้อนกลับ' class='prev-button custom-button' value="ย้อนกลับ"> 
+<input type="button" value="ส่งข้อมูล" onclick="calculateScoresAndSend()" class="custom-button">
+          
+          </div>
+      </fieldset>
+
+      </div>
+    </form>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+
+<script>
+$(document).ready(function () {
+  $("fieldset").hide();            // ซ่อนทุก fieldset
+  $("fieldset").first().show();    // โชว์ fieldset แรก
+
+  $('.next-button').click(function () {
+    var current = $(this).closest("fieldset");
+    var next = current.next("fieldset");
+    $(".custom-progress li").eq($("fieldset").index(next)).addClass("active");
+    current.hide();
+    next.show();
+  });
+
+  $('.prev-button').click(function () {
+    var current = $(this).closest("fieldset");
+    var prev = current.prev("fieldset");
+    $(".custom-progress li").eq($("fieldset").index(current)).removeClass("active");
+    current.hide();
+    prev.show();
+  });
+});
+
+async function calculateScoresAndSend() {
+
+  for (let i = 1; i <= 26; i++) {
+    let name = '';
+    let displayNumber = i;
+
+    if (i <= 9) {
+      name = behav${i}; // ข้อ 1-9 คือพฤติกรรม
+    } else {
+      name = q${i - 9}; // ข้อ 10-26 คือความรู้ q1–q17
+      displayNumber = i - 9;
+    }
+
+    const selected = document.querySelector(input[name="${name}"]:checked);
+    if (!selected) {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'กรุณาตอบคำถามให้ครบ',
+        text: คุณยังไม่ได้ตอบคำถามข้อที่ ${displayNumber},
+        confirmButtonText: 'ตกลง',
+        buttonsStyling: false,
+        customClass: { confirmButton: 'my-confirm-btn' }
+      });
+      return; // หยุดไม่ให้ส่ง
+    }
+  }
+
+  // ====== เก็บคะแนน ======
+  let behaviorScore = 0;
+  let knowledgeScore = 0;
+
+  for (let i = 1; i <= 9; i++) {
+    const val = document.querySelector(input[name="behav${i}"]:checked);
+    if (val) behaviorScore += parseInt(val.value);
+  }
+
+  for (let i = 1; i <= 17; i++) {
+    const val = document.querySelector(input[name="q${i}"]:checked);
+    if (val) knowledgeScore += parseInt(val.value);
+  }
+
+  let behaviorAvg = behaviorScore / 9;
+  let behaviorRisk = '';
+
+  if (behaviorAvg >= 1.00 && behaviorAvg <= 1.50) {
+    behaviorRisk = "พฤติกรรมอยู่ในระดับต้องแก้ไข";
+  } else if (behaviorAvg > 1.50 && behaviorAvg <= 2.50) {
+    behaviorRisk = "พฤติกรรมอยู่ในระดับควรปรับปรุง";
+  } else if (behaviorAvg > 2.50 && behaviorAvg <= 3.50) {
+    behaviorRisk = "พฤติกรรมอยู่ในระดับพอใช้";
+  } else if (behaviorAvg > 3.50 && behaviorAvg <= 4.50) {
+    behaviorRisk = "พฤติกรรมอยู่ในระดับดี";
+  } else if (behaviorAvg > 4.50 && behaviorAvg <= 5.00) {
+    behaviorRisk = "พฤติกรรมอยู่ในระดับดีมาก";
+  } else {
+    behaviorRisk = "คะแนนพฤติกรรมไม่อยู่ในช่วงที่กำหนด";
+  }
+
+  let knowledgePercent = (knowledgeScore / 17) * 100;
+  let knowledgeRisk = '';
+
+  if (knowledgePercent < 60) {
+    knowledgeRisk = "มีความรู้ระดับต่ำ";
+  } else if (knowledgePercent >= 60 && knowledgePercent <= 69) {
+    knowledgeRisk = "มีความรู้ระดับปานกลาง";
+  } else if (knowledgePercent >= 70 && knowledgePercent <= 79) {
+    knowledgeRisk = "มีความรู้ระดับดี";
+  } else if (knowledgePercent >= 80 && knowledgePercent <= 100) {
+    knowledgeRisk = "มีความรู้ระดับดีมาก";
+  } else {
+    knowledgeRisk = "คะแนนความรู้ไม่อยู่ในช่วงที่กำหนด";
+  }
+
+  let firstName = localStorage.getItem("first_name");
+  let lastName = localStorage.getItem("last_name");
+
+  async function submitResult(firstName, lastName) {
+    try {
+      const response = await fetch('https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'saveAssessmentResults',
+          formObject: {
+            first_name: firstName,
+            last_name: lastName,
+            behavior_score: behaviorAvg.toFixed(2),
+            behavior_risk: behaviorRisk,
+            knowledge_score: knowledgePercent.toFixed(2),
+            knowledge_risk: knowledgeRisk
+          }
+        })
+      });
+
+      const res = await response.json();
+
+      if (res.status === "updated") {
+        await Swal.fire({
+          icon: 'success',
+          title: 'บันทึกผลประเมินแล้ว',
+          html: <b>พฤติกรรม:</b> ${behaviorRisk}<br><b>ความรู้:</b> ${knowledgeRisk},
+          confirmButtonText: 'ตกลง',
+          buttonsStyling: false,
+          customClass: { confirmButton: 'my-confirm-btn' }
+        });
+
+        // รีเซ็ตฟอร์มและ UI
+        document.querySelectorAll('input[type="radio"]').forEach(input => input.checked = false);
+        $("fieldset").hide();
+        $("fieldset").first().show();
+        $(".custom-progress li").removeClass("active");
+        $(".custom-progress li").first().addClass("active");
+      } else {
+        throw new Error('ไม่พบข้อมูลผู้ใช้');
+      }
+    } catch (error) {
+      console.error(error);
+      await Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: error.message || 'กรุณาลองใหม่อีกครั้ง',
+        confirmButtonText: 'ตกลง',
+        buttonsStyling: false,
+        customClass: { confirmButton: 'my-confirm-btn' }
+      });
+    }
+  }
+
+  if (firstName && lastName) {
+    await submitResult(firstName, lastName);
+  } else {
+    const { value: formValues } = await Swal.fire({
+      title: 'กรอกชื่อ-นามสกุล',
+      html:
+        '<input id="swal-input1" class="swal2-input" placeholder="ชื่อ">' +
+        '<input id="swal-input2" class="swal2-input" placeholder="นามสกุล">',
+      focusConfirm: false,
+      preConfirm: () => {
+        const fn = document.getElementById('swal-input1').value.trim();
+        const ln = document.getElementById('swal-input2').value.trim();
+        if (!fn || !ln) {
+          Swal.showValidationMessage('กรุณากรอกชื่อและนามสกุลให้ครบ');
+        }
+        return { fn, ln };
+      }
+    });
+
+    if (formValues) {
+      firstName = formValues.fn;
+      lastName = formValues.ln;
+
+      localStorage.setItem("first_name", firstName);
+      localStorage.setItem("last_name", lastName);
+
+      await submitResult(firstName, lastName);
+    }
+  }
+}
+</script>
+  </body>
+
+</html>
