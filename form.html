@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+		integrity="sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2" crossorigin="anonymous">
+
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@400&display=swap" rel="stylesheet">
+	<style>
+		body {
+			font-family: 'Prompt', sans-serif;
+			background: linear-gradient(to right, #d0eaff, #e6f2ff, #f2f9ff);
+		}
+
+    .btn-shadow {
+      background-color: #89cff0;
+      color: black;
+      transition: all 0.3s ease;
+    }
+
+    .btn-shadow:hover {
+      box-shadow:0 0 0 2px #fff, 0 0 0 4px #89cff0;
+    }
+    
+.form-check-input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+  transition: border 0.3s ease, background-color 0.3s ease;
+}
+
+.form-check-input[type="checkbox"]:checked {
+  background-color: #89cff0;
+  border-color: #89cff0;
+}
+
+.form-check-input[type="checkbox"]:checked::after {
+  content: '';
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+/* เปลี่ยน border เมื่อ hover */
+.form-check-input[type="checkbox"]:hover {
+  border-color: #4fa3d1;
+}
+
+    .form-check-input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;
+  border-radius: 50%;
+  outline: none;
+  position: relative;
+  cursor: pointer;
+  transition: border 0.3s ease;
+}
+
+.form-check-input[type="radio"]:checked {
+  border-color: #89cff0;
+  background-color: #fff;
+}
+
+
+/* จุดตรงกลางตอนถูกเลือก */
+.form-check-input[type="radio"]:checked::before {
+  content: '';
+  display: block;
+  width: 10px;
+  height: 10px;
+  background-color: #89cff0;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* เปลี่ยน border เมื่อ hover */
+.form-check-input[type="radio"]:hover {
+  border-color: #4fa3d1;
+}
+	</style>
+</head>
+
+<body>
+	<div class="container py-4">
+		<div class="row justify-content-center">
+			<div class="col-12 col-md-8 col-lg-6">
+				<div class="card shadow-sm" style="border: 2px solid #89cff0;  border-radius: 10px;">
+					<div class="card-header text-white text-center" style="background-color: #89cff0;">
+          <h5 class="mb-0">แบบสอบถามข้อมูลส่วนบุคคล</h5>
+          </div>
+					<div class="card-body">
+						<form id="myForm" onsubmit="handleFormSubmit(this)">
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label for="first_name">ชื่อ</label>
+									<input type="text" class="form-control" id="first_name" name="first_name" placeholder="ชื่อ" required>
+								</div>
+								<div class="form-group col-md-6">
+									<label for="last_name">สกุล</label>
+									<input type="text" class="form-control" id="last_name" name="last_name" placeholder="สกุล" required>
+								</div>
+							</div>
+
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<label>เพศ</label><br>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="gender" id="male" value="ชาย" required>
+										<label class="form-check-label" for="male">ชาย</label>
+									</div>
+									<div class="form-check form-check-inline">
+										<input class="form-check-input" type="radio" name="gender" id="female" value="หญิง">
+										<label class="form-check-label" for="female">หญิง</label>
+									</div>
+							</div>
+
+            <div class="form-row">
+            <div class="form-group col-12 col-md-6">
+              <label for="wght">อายุ</label>
+              <input type="number" step="any" class="form-control" id="age" name="age" required>
+            </div>
+
+          <div class="form-group col-12">
+            <label for="marital_status">สถานภาพสมรส</label>
+            <select id="marital_status" name="marital_status" class="form-control" required>
+              <option disabled selected value="">กรุณาเลือก</option>
+              <option>โสด</option>
+              <option>สมรส</option>
+              <option>หย่าร้าง/แยกกันอยู่</option>
+              <option>หม้าย</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="education">ระดับการศึกษา</label>
+            <select id="education" name="education" class="form-control" required>
+              <option disabled selected value="">กรุณาเลือก</option>
+              <option>ไม่ได้เรียน</option>
+              <option>ประถมศึกษา</option>
+              <option>มัธยมศึกษา/ปวช.</option>
+              <option>อนุปริญญา/ปวส.</option>
+              <option>ปริญญาตรี</option>
+              <option>สูงกว่าปริญญาตรี</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="income">รายได้ต่อเดือน</label>
+            <select id="income" name="income" class="form-control" required>
+              <option disabled selected value="">กรุณาเลือก</option>
+              <option>น้อยกว่า 10,000 บาท</option>
+              <option>10,000-20,000 บาท</option>
+              <option>20,001-30,000 บาท</option>
+              <option>30,001-40,000 บาท</option>
+              <option>มากกว่า 40,000 บาท</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label>ประวัติโรคประจำตัว (วินิจฉัยโดยแพทย์เท่านั้น)</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease1" value="เป็น" required>
+              <label class="form-check-label">เป็น</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease1" value="ไม่เป็น">
+              <label class="form-check-label">ไม่เป็น</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease1" value="ไม่แน่ใจ">
+              <label class="form-check-label">ไม่แน่ใจ</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label>เลือกโรค (ถ้ามี)</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check11" name="disease_check11" value="โรคความดันโลหิตสูง">
+              <label class="form-check-label">โรคความดันโลหิตสูง</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check22" name="disease_check22" value="โรคเบาหวาน">
+              <label class="form-check-label">โรคเบาหวาน</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check33" name="disease_check33" value="โรคไขมันในเลือดสูง">
+              <label class="form-check-label">โรคไขมันในเลือดสูง</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="period">ระยะเวลาที่เป็น (ปี)</label>
+            <input type="number" class="form-control" id="period" name="period" min="0">
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label>ประวัติการดื่มแอลกอฮอล์</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="alcohol" value="ไม่เคยดื่ม" required>
+              <label class="form-check-label">ไม่เคยดื่ม</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="alcohol" value="เคยดื่ม">
+              <label class="form-check-label">เคยดื่ม ปัจจุบันเลิกดื่ม</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="alcohol" value="ปัจจุบันยังดื่ม">
+              <label class="form-check-label">ปัจจุบันยังดื่ม</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="alcohol2">ความถี่ในการดื่ม</label>
+            <select class="form-control" id="alcohol2" name="alcohol2">
+              <option disabled selected value="">กรุณาเลือก</option>
+              <option value="sometimes">ดื่มเป็นครั้งคราว</option>
+              <option value="1-4_month">1-4 ครั้ง/เดือน</option>
+              <option value="2-4_week">2-4 ครั้ง/สัปดาห์</option>
+              <option value="always">ทุกวัน/เกือบทุกวัน</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label>ประวัติการสูบบุหรี่</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="smoke" value="ไม่สูบ" required>
+              <label class="form-check-label">ไม่สูบ</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="smoke" value="เคยสูบ">
+              <label class="form-check-label">เคยสูบ ปัจจุบันเลิกสูบแล้ว</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="smoke" value="ปัจจุบันยังสูบ">
+              <label class="form-check-label">ปัจจุบันยังสูบ</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12 col-md-6">
+            <label for="smoke2">ความถี่ในการสูบ</label>
+            <select class="form-control" id="smoke2" name="smoke2">
+              <option disabled selected value="">กรุณาเลือก</option>
+              <option value="less_5">น้อยกว่า 5 มวน/วัน</option>
+              <option value="5-10">5-10 มวน/วัน</option>
+              <option value="more_10">มากกว่า 10 มวน/วัน</option>
+            </select>
+          </div>
+
+          <div class="form-group col-12">
+            <label>คนในครอบครัวมีประวัติเป็นโรคหลอดเลือดหัวใจ</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease_" value="ไม่เป็น" required>
+              <label class="form-check-label">ไม่เป็น</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease_" value="เป็น">
+              <label class="form-check-label">เป็น</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="disease_" value="ไม่ทราบ">
+              <label class="form-check-label">ไม่ทราบ</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <label>เลือกบุคคล (ถ้ามี)</label>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check1" name="disease_check1" value="บิดา">
+              <label class="form-check-label">บิดา</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check2" name="disease_check2" value="มารดา">
+              <label class="form-check-label">มารดา</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check3" name="disease_check3" value="พี่/น้อง">
+              <label class="form-check-label">พี่/น้อง</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check4" name="disease_check4" value="ปู่/ย่า/ตา/ยาย">
+              <label class="form-check-label">ปู่/ย่า/ตา/ยาย/</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="disease_check5" name="disease_check5" value="ลุง/ป้า/น้า/อา">
+              <label class="form-check-label">ลุง/ป้า/น้า/อา</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <label>การรับประทานยาและผลิตภัณฑ์ทางสุขภาพ</label><br>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="drug" value="ไม่มี" required>
+              <label class="form-check-label">ไม่มี</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" name="drug" value="มี">
+              <label class="form-check-label">มี</label>
+            </div>
+          </div>
+
+          <div class="form-group col-12">
+            <label for="type">ระบุชื่อยาหรือผลิตภัณฑ์ทางสุขภาพ (ถ้ามี)</label>
+            <input type="text" class="form-control" id="type" name="type">
+          </div>
+
+					<button type="submit" class="btn btn-block btn-shadow">บันทึก</button>
+          
+						</form>
+						<div id="output" class="mt-3"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  function preventFormSubmit() {
+    var forms = document.querySelectorAll('form');
+    for (var i = 0; i < forms.length; i++) {
+      forms[i].addEventListener('submit', function(event) {
+        event.preventDefault();
+        handleFormSubmit(event.target);
+      });
+    }
+  }
+  window.addEventListener('load', preventFormSubmit);
+
+  async function handleFormSubmit(formObject) {
+    // แปลง form เป็น object
+    const formData = new FormData(formObject);
+    const obj = {};
+    formData.forEach((value, key) => {
+      obj[key] = value;
+    });
+
+    localStorage.setItem("first_name", obj.first_name);
+    localStorage.setItem("last_name", obj.last_name);
+
+    try {
+      // เรียก fetch POST ไปที่ GAS API endpoint (แก้ YOUR_DEPLOY_ID เป็นจริง)
+      const response = await fetch('https://script.google.com/macros/s/YOUR_DEPLOY_ID/exec', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: 'processForm',
+          formObject: obj
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.status === "duplicate") {
+        Swal.fire({
+          icon: 'warning',
+          title: 'ข้อมูลนี้เคยกรอกแล้ว',
+          text: 'ไม่สามารถกรอกซ้ำได้',
+          showConfirmButton: false,
+          timer: 1800
+        });
+      } else if (data.status === "success") {
+        formObject.reset();
+        Swal.fire({
+          position: 'center',
+          icon: 'success',
+          title: 'บันทึกเรียบร้อย',
+          showConfirmButton: false,
+          timer: 1500
+        });
+      } else {
+        throw new Error('Unknown response status');
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: 'error',
+        title: 'เกิดข้อผิดพลาด',
+        text: 'กรุณาลองใหม่อีกครั้ง',
+      });
+    }
+  }
+</script>
